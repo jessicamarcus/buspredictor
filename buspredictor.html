@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html><head>
+	<title>personal bus predictor</title>
+	<link type="text/css" rel="stylesheet" href="./whichbus.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.0.0.js"></script>
+	<script type="text/javascript" src="./buspredictor.js"></script>
+
+</head>
+
+<body>
+
+<div data-bind="foreach: Routes">
+	<div class="prediction">
+		<span data-bind="text: agencyTitle" class="title"></span> - <span class="title">Route </span><span data-bind="text: routeTitle" class="title"></span> <br />
+		<span data-bind="text: stopTitle" class="title"></span><br />
+		<div data-bind="foreach: directions">
+			<p><span data-bind="text: title" class="title"></span><br />
+				<span data-bind="foreach: predictions">
+					<span data-bind="css: { delayed: delayed() == true }">
+						<span data-bind="text: minutes"></span> minutes away<br />
+					</span>
+				</span>
+			</p>
+		</div>
+	</div>
+</div>
+
+
+<button type="button" onclick="PredictionsXMLLoadData('./89davis.xml')">89 to Davis</button>
+<button type="button" onclick="PredictionsXMLLoadData('./89sullivan.xml')">89 to Sullivan</button>
+<button type="button" onclick="PredictionsXMLLoadData('./101sullivan.xml')">101 to Sullivan</button>
+
+<button type="button" onclick="PredictionsXMLLoadData('http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=mbta&r=89&d=89_0_var0&s=2729&ts=2730')">live data: 89 to davis</button>
+
+</body></html>

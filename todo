@@ -1,0 +1,25 @@
+
+http://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf
+
+also list arrival estimates by local time of day
+
+reload data every 60 seconds, display last refresh time on screen
+
+save selections with a cookie or something persistent
+
+user can choose X number of routes to display, change order, remove, add
+user can register an account to save parameters
+
+alarm (popup and/or audible) - user selects 5, 10, 15min prior to a particular vehicle's arrival at selected stop
+
+estimated time to arrival & estimated time of departure of another vehicle - how long will layover be? how much risk of missing your connection?
+
+
+
+
+
+xml request format:
+http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=mbta&r=89&d=89_0_var0&s=2729&ts=2730
+
+this is what a delayed bus looks like:
+<prediction epochTime="1389230543872" seconds="4273" minutes="71" isDeparture="false" affectedByLayover="true" delayed="true" slowness="0.491" dirTag="11_0_var0" vehicle="2221" block="C11_97" tripTag="22008479"/>

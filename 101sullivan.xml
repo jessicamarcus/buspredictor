@@ -1,0 +1,9 @@
+<body copyright="All data copyright MBTA 2014.">
+	<predictions agencyTitle="MBTA" routeTitle="101" routeTag="101" stopTitle="Main St @ Broadway" stopTag="5303">
+		<direction title="Sullivan Square via Salem St.">
+			<prediction epochTime="1388974533407" seconds="2082" minutes="34" isDeparture="false" affectedByLayover="true" dirTag="101_1_var0" vehicle="0684" block="G101_36" tripTag="21751832"/>
+			
+			<prediction epochTime="1388978133407" seconds="5682" minutes="94" isDeparture="false" affectedByLayover="true" dirTag="101_1_var0" vehicle="0684" block="G101_36" tripTag="21751834"/>
+		</direction>
+	</predictions>
+</body>

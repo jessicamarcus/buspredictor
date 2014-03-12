@@ -1,0 +1,9 @@
+<body copyright="All data copyright MBTA 2014.">
+	<predictions agencyTitle="MBTA" routeTitle="89" routeTag="89" stopTitle="Broadway opp Main St" stopTag="2703">
+		<direction title="Sullivan Station via Broadway">
+			<prediction epochTime="1388971649969" seconds="48" minutes="0" isDeparture="false" dirTag="89_1_var1" vehicle="0670" block="G95_17" tripTag="21752479"/>
+			
+			<prediction epochTime="1388975454254" seconds="3852" minutes="64" isDeparture="false" affectedByLayover="true" dirTag="89_1_var1" vehicle="0656" block="G101_35" tripTag="21752239"/>
+		</direction>
+	</predictions>
+</body>
