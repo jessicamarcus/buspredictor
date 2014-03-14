@@ -1,16 +1,6 @@
-// Utility Functions
-
-function convertUTC(epoch) {
-	var utcSeconds = epoch;
-}
-
 function RoutePredictionsFactory() {
 	this.build = function($node) {
-		var routePredictions = new RoutePredictions($node.attr("agencyTitle"), $node.attr("routeTitle"));
-
-
-		routePredictions.stopTitle = ko.observable($node.attr("stopTitle"));
-
+		var routePredictions = new RoutePredictions($node.attr("agencyTitle"), $node.attr("routeTitle"), $node.attr("stopTitle"));
 		var directionFactory = new DirectionFactory();
 
 		$node.find("direction").each(function() {
@@ -23,9 +13,7 @@ function RoutePredictionsFactory() {
 
 function DirectionFactory() {
 	this.build = function($node) {
-		var direction = new Direction();
-		direction.title = ko.observable($node.attr("title"));
-
+		var direction = new Direction($node.attr("title"));
 		var vehiclePredictionFactory = new VehiclePredictionFactory();
 
 		$node.find("prediction").each(function(){
@@ -38,19 +26,18 @@ function DirectionFactory() {
 
 function VehiclePredictionFactory() {
 	this.build = function($node) {
-		var prediction = new VehiclePrediction();
-		prediction.minutes = ko.observable($node.attr("minutes"));
-		prediction.isScheduleBased = ko.observable($node.attr("isScheduleBased"));
-		prediction.delayed = ko.observable($node.attr("delayed"));
-		prediction.slowness = ko.observable($node.attr("slowness"));
-
+		var prediction = new VehiclePrediction(
+			$node.attr("minutes"),
+			$node.attr("isScheduleBased"),
+			$node.attr("epochTime"),
+			$node.attr("delayed"),
+			$node.attr("slowness")
+		);
 		return prediction;
 	};
 }
 
 function PredictionsXMLLoadData(predictionsXMLFile) {
-	var self = this;
-
 	var mbtaService = new NextBusService();
 	mbtaService.getRoute(predictionsXMLFile, function (predictionsViewModel) {
 		appModel.Routes.push(predictionsViewModel);
@@ -59,35 +46,37 @@ function PredictionsXMLLoadData(predictionsXMLFile) {
 }
 
 
-
-
 // View Model
-function AppViewModel () {
-	this.Routes = ko.observableArray();
-	this.SelectedRoutes = ko.observableArray();
-	this.AvailableRoutes = ko.observableArray();
+//function AppViewModel () {
+//	this.Routes = ko.observableArray();
+//	this.SelectedRoutes = ko.observableArray();
+//	this.AvailableRoutes = ko.observableArray();
+//}
+
+///////// constructors
+function RoutePredictions(agencyTitle, routeTitle, stopTitle) {
+	this.agencyTitle = ko.observable(agencyTitle);
+	this.routeTitle = ko.observable(routeTitle);
+	this.stopTitle = ko.observable(stopTitle);
+	this.directions = ko.observableArray();
 }
 
-function RoutePredictions(agencyTitle, routeTitle) {
-	var self = this;
-	self.agencyTitle = ko.observable(agencyTitle);
-	self.routeTitle = ko.observable(routeTitle);
-
-	self.directions = ko.observableArray();
-}
-
-function Direction() {
+function Direction(title) {
+	this.title = ko.observable(title);
 	this.predictions = ko.observableArray(); // array of prediction instances
 }
 
-function VehiclePrediction() {
-
+function VehiclePrediction(minutes, isScheduleBased, epochTime, delayed, slowness) {
+	this.minutes = ko.observable(minutes);
+	this.isScheduleBased = ko.observable(isScheduleBased);
+	this.epochTime = ko.observable(utcToLocal12hrTime(epochTime));
+	this.delayed = ko.observable(delayed); //these last two are not always present
+	this.slowness = ko.observable(slowness);
 }
-
+///////////
 // Factory
 function CreateViewModel($xml) {
-	var self = this,
-		factory = new RoutePredictionsFactory(),
+	var factory = new RoutePredictionsFactory(),
 		routePredictions = factory.build($xml.find("predictions"));
 	return routePredictions;
 }
