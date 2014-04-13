@@ -1,25 +1,25 @@
 function utcToLocal12hrTime(durationUTC) {
 
-	var localDuration = new Date();
-	var localOffset = localDuration.getTimezoneOffset();
+    var localDuration = new Date(),
+        localOffset = localDuration.getTimezoneOffset();
 
-	var duration = durationUTC - (localOffset * (1000 * 60));
+    var duration = durationUTC - (localOffset * (1000 * 60));
 
-	var minutes = parseInt((duration / (1000*60))%60),
-		hours = parseInt((duration / (1000*60*60))%24),
-		timeOfDay;
+    var minutes = parseInt((duration / (1000*60))%60),
+        hours = parseInt((duration / (1000*60*60))%24),
+        timeOfDay;
 
-	if (hours < 12) {
-		timeOfDay = "AM";
-		if (hours === 0) hours = 12; // fix for midnight = 00:00
-	} else {
-		timeOfDay = "PM";
-		if (hours > 12) hours = hours - 12; // fix for 24-hour time
-	}
+    if (hours < 12) {
+        timeOfDay = "AM";
+        if (hours === 0) hours = 12; // fix for midnight = 00:00
+    } else {
+        timeOfDay = "PM";
+        if (hours > 12) hours = hours - 12; // fix for 24-hour time
+    }
 
-	minutes = (minutes < 10) ? "0" + minutes : minutes;
+    minutes = (minutes < 10) ? "0" + minutes : minutes;
 
-	return hours + ":" + minutes + timeOfDay;
+    return hours + ":" + minutes + timeOfDay;
 }
 
 // unit tests

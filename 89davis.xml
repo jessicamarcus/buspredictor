@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <body copyright="All data copyright MBTA 2014.">
-	<predictions agencyTitle="MBTA" routeTitle="89" routeTag="89" stopTitle="Broadway @ Main St" stopTag="2729">
-		<direction title="Davis Square via Broadway">
-			<prediction epochTime="1389204789480" seconds="720" minutes="12" isDeparture="false" affectedByLayover="true" dirTag="89_0_var0" vehicle="0630" block="G89_16" tripTag="21757870"/>
+    <predictions agencyTitle="MBTA" routeTitle="89" routeTag="89" stopTitle="Broadway @ Main St" stopTag="2729">
+        <direction title="Davis Square via Broadway">
+            <prediction epochTime="1389204789480" seconds="720" minutes="12" isDeparture="false" affectedByLayover="true" dirTag="89_0_var0" vehicle="0630" block="G89_16" tripTag="21757870"/>
 
-			<prediction epochTime="1389208209480" seconds="4140" minutes="69" isDeparture="false" affectedByLayover="true" delayed="true" dirTag="89_0_var0" vehicle="0630" block="G89_16" tripTag="21757874"/>
-		</direction>
+            <prediction epochTime="1389208209480" seconds="4140" minutes="69" isDeparture="false" affectedByLayover="true" delayed="true" dirTag="89_0_var0" vehicle="0630" block="G89_16" tripTag="21757874"/>
+        </direction>
 
-		<direction title="Clarendon Hill via Broadway">
-			<prediction epochTime="1389209166570" seconds="5097" minutes="84" isDeparture="false" affectedByLayover="true" dirTag="89_0_var1" vehicle="0676" block="G101_73" tripTag="21757876"/>
-		</direction>
-	</predictions>
+        <direction title="Clarendon Hill via Broadway">
+            <prediction epochTime="1389209166570" seconds="5097" minutes="84" isDeparture="false" affectedByLayover="true" dirTag="89_0_var1" vehicle="0676" block="G101_73" tripTag="21757876"/>
+        </direction>
+    </predictions>
 </body>
