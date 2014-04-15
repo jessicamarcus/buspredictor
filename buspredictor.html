@@ -2,31 +2,34 @@
 <html>
 <head>
     <title>Personal Bus Predictor</title>
+    <meta content="width=device-width,initial-scale=1.0" name="viewport">
     <link type="text/css" rel="stylesheet" href="./buspredictor.css" />
-    <link href="http://fonts.googleapis.com/css?family=Emblema+One" rel="stylesheet" type="text/css">
 
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.0.0.js"></script>
-    <!--<script src="buspredictor.js"></script>-->
-    <script type="text/javascript" src="buspredictor.js"></script>
+    <script type="text/javascript" src="./buspredictor.js"></script>
     <script type="text/javascript" src="./utc_handlers.js"></script>
 </head>
 <body>
-<div data-bind="foreach: selectedPredictions">
-    <span data-bind="text: agencyTitle" class="title"></span> <span class="title">Route </span>
-    <span data-bind="text: routeTitle" class="title"></span> <br />
-    <span data-bind="text: stopTitle"></span><br />
-    <div data-bind="foreach: directions">
-        <span data-bind="text: title"></span><br />
-        <span data-bind="foreach: predictions">
-            <span data-bind="text: delayed"></span><br/>
-            <span data-bind="text: minutes"></span><br/>
-            <span data-bind="text: epochTime"></span><br />
-        </span>
-    </div>
-    <span><a href="#" data-bind="click: $root.removePrediction">Remove prediction</a></span>
-</div>
+<h1>Personal Bus Predictor</h1>
 <button type="button" onclick="LoadViewModel('./89davis.xml')">89 to Davis</button>
 <button type="button" onclick="LoadViewModel('./101sullivan.xml')">101 to Sullivan</button>
+<div data-bind="foreach: selectedPredictions">
+    <div class="prediction">
+        <p><span data-bind="text: agencyTitle" class="title"></span> <span class="title">Route </span>
+        <span data-bind="text: routeTitle" class="title"></span> <br />
+        Stop: <span data-bind="text: stopTitle"></span></p>
+        <div data-bind="foreach: directions">
+            <span data-bind="text: title" class="directionTitle"></span><br />
+            <span data-bind="foreach: predictions">
+                <div data-bind="css: {delayedBus: delayed() === 'true'}" class="displayedPrediction">
+                    <span data-bind="text: minutes"></span> minutes away / arrives at <span data-bind="text: epochTime"></span><br />
+                </div>
+            </span>
+        </div>
+        <div class="removePrediction"><a href="#" data-bind="click: $root.removeRoutePrediction">Remove prediction</a></div>
+    </div>
+</div>
+
 </body>
 </html>

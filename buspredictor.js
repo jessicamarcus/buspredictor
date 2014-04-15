@@ -1,11 +1,37 @@
 function BuspredictorViewModel() {
     var self = this;
-    self.selectedPredictions = ko.observableArray([]);
+    self.selectedPredictions = ko.observableArray();
 
-    self.addRoutePrediction = function(route) {
-        self.selectedPredictions.push(route);
+    self.addRoutePrediction = function(routeObj) {
+
+        ///check if the selected route is already in the array, and if so replace the old with new.
+
+        for (var i = 0; i < self.selectedPredictions().length; i++) {
+            var compareRouteObj = self.selectedPredictions()[i];
+            if (compareRouteObj.routeObjKey !== routeObj.routeObjKey) {
+                console.log("new obj");
+            } else {
+                console.log("obj exists");
+            }
+        }
+
+        self.selectedPredictions.push(routeObj);
     };
+
+    //    self.addRoutePrediction = function(routeObj) {
+//
+//        for
+//            var route = selectedPredictions[i];
+//            if(route.compare(routeObj))
+//            ///overwrite the obj in the array with the new obj
+//        } else {
+//            self.selectedPredictions.push(routeObj);
+//        }
+//    };
+
+
     self.removePrediction = function(prediction) {
+        ///check to make sure it always and only removes the object calling this function
         self.selectedPredictions.remove(prediction);
     };
 }
@@ -29,7 +55,7 @@ function LoadViewModel(xml) {
 /////factories
 function RoutePredictionsFactory() {
     this.build = function($node) {
-        var routePredictions = new RoutePredictions($node.attr("agencyTitle"), $node.attr("routeTitle"), $node.attr("stopTitle")),
+        var routePredictions = new RoutePredictions($node.attr("agencyTitle"), $node.attr("routeTitle"), $node.attr("stopTitle"), $node.attr("stopTag")),
             directionFactory = new DirectionFactory();
 
         $node.find("direction").each(function() {
@@ -67,11 +93,17 @@ function VehiclePredictionFactory() {
 }
 
 /////constructors
-function RoutePredictions(agencyTitle, routeTitle, stopTitle) {
+function RoutePredictions(agencyTitle, routeTitle, stopTitle, stopTag) {
     this.agencyTitle = ko.observable(agencyTitle);
     this.routeTitle = ko.observable(routeTitle);
     this.stopTitle = ko.observable(stopTitle);
+    this.stopTag = ko.observable(stopTag);
     this.directions = ko.observableArray();
+    this.routeObjKey = routeTitle + stopTag;
+    this.compare = function(oldObj, newObj) {
+        ///new obj and old obj are sent here to be compared - return true/false
+        return (routeObjID(oldObj) === routeObjID(newObj));
+    };
 }
 
 function Direction(title) {

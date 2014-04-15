@@ -12,13 +12,38 @@ body {
     background-color: #eee;
     display: inline-block;
     vertical-align: top;
+    position: relative;
 }
 
-.delayed {
-    background-color: #f55
+.directionTitle {
+    font-weight: bold;
+}
+
+.delayedBus {
+    background-color: rgba(255, 0, 0, 0.4);
+}
+
+.displayedPrediction {
+    padding: 2px;
+}
+.displayedPrediction:last-of-type {
+    margin-bottom: 10px;
+}
+
+.removePrediction {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
 }
 
 .title {
-    font-family: "Emblema One", sans-serif;
+    font-weight: bold;
     font-size: 1.5em;
+}
+
+@media (max-width: 600px) {
+   .prediction {
+       width: 90%;
+       display: block;
+   }
 }
