@@ -3,37 +3,30 @@ function BuspredictorViewModel() {
     self.selectedPredictions = ko.observableArray();
 
     self.addRoutePrediction = function(routeObj) {
-
-        ///check if the selected route is already in the array, and if so replace the old with new.
-
-        for (var i = 0; i < self.selectedPredictions().length; i++) {
-            var compareRouteObj = self.selectedPredictions()[i];
-            if (compareRouteObj.routeObjKey !== routeObj.routeObjKey) {
-                console.log("new obj");
-            } else {
-                console.log("obj exists");
+        ///always add the first routeObj
+        if (self.selectedPredictions().length === 0) {
+            self.selectedPredictions.push(routeObj);
+        } else {
+            ///check if this route is already in the array
+            for (var i = 0; i < self.selectedPredictions().length; i++) {
+                var compareRouteObj = self.selectedPredictions()[i];
+                if (compareRouteObj.routeObjKey === routeObj.routeObjKey) {
+                    ///replace the old with new
+                    self.selectedPredictions[i] = routeObj;
+                    return;
+                } ///else: do nothing and continue iterating through array
             }
+            ///if this is a new routeObj, add it to the array
+            self.selectedPredictions.push(routeObj);
         }
-
-        self.selectedPredictions.push(routeObj);
     };
-
-    //    self.addRoutePrediction = function(routeObj) {
-//
-//        for
-//            var route = selectedPredictions[i];
-//            if(route.compare(routeObj))
-//            ///overwrite the obj in the array with the new obj
-//        } else {
-//            self.selectedPredictions.push(routeObj);
-//        }
-//    };
-
 
     self.removePrediction = function(prediction) {
         ///check to make sure it always and only removes the object calling this function
-        self.selectedPredictions.remove(prediction);
-    };
+        //self.selectedPredictions.remove(prediction);
+        console.log(prediction);
+        }
+
 }
 
 function GetRoutePrediction(xml) {
