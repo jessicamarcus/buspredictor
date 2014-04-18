@@ -7,11 +7,11 @@ function BuspredictorViewModel() {
         if (self.selectedPredictions().length === 0) {
             self.selectedPredictions.push(routeObj);
         } else {
-            ///check if this route is already in the array
+            ///check if this prediction is already in the array
             for (var i = 0; i < self.selectedPredictions().length; i++) {
                 var compareRouteObj = self.selectedPredictions()[i];
                 if (compareRouteObj.routeObjKey === routeObj.routeObjKey) {
-                    ///replace the old with new
+                    ///replace old prediction with new
                     self.selectedPredictions[i] = routeObj;
                     return;
                 } ///else: do nothing and continue iterating through array
@@ -21,12 +21,11 @@ function BuspredictorViewModel() {
         }
     };
 
-    self.removePrediction = function(prediction) {
-        ///check to make sure it always and only removes the object calling this function
-        //self.selectedPredictions.remove(prediction);
-        console.log(prediction);
+    self.removeRoutePrediction = function(prediction) {
+        ///check to make sure it always and only removes the prediction calling this function
+        self.selectedPredictions.remove(prediction);
+        console.log("function called");
         }
-
 }
 
 function GetRoutePrediction(xml) {
@@ -93,10 +92,6 @@ function RoutePredictions(agencyTitle, routeTitle, stopTitle, stopTag) {
     this.stopTag = ko.observable(stopTag);
     this.directions = ko.observableArray();
     this.routeObjKey = routeTitle + stopTag;
-    this.compare = function(oldObj, newObj) {
-        ///new obj and old obj are sent here to be compared - return true/false
-        return (routeObjID(oldObj) === routeObjID(newObj));
-    };
 }
 
 function Direction(title) {
