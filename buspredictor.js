@@ -22,11 +22,38 @@ function BuspredictorViewModel() {
     };
 
     self.removeRoutePrediction = function(prediction) {
-        ///check to make sure it always and only removes the prediction calling this function
+        ///removes selected prediction from view and array
         self.selectedPredictions.remove(prediction);
-        console.log("function called");
-        }
+    };
+
+//    ///update VehiclePrediction nodes every 60sec
+//    self.updatePredictions = self.setInterval(refreshPredictionData(self.selectedPredictions), 6000);
+
 }
+//function refreshPredictionData() {
+//    ///for each selectedPredictions[i]
+//    for (var i = 0; i < this.selectedPredictions().length; i++) {
+//    ///remove "directions" nodes
+//        var currentPrediction = this.selectedPredictions[i];
+//        //currentPrediction.directions = /*remove directions entirely*/;
+//        ///OR can we just build a new directions obj and overwrite the old one??
+//    ///ajax request for fresh xml
+//        $.ajax({
+//            type: "GET",
+//            url: /*xml... how do we specify the path? do we need to store it on the predictions obj upon initial creation?*/,
+//            dataType: "xml",
+//            success: function(data) {
+//                var factory = new DirectionFactory();
+//                currentPrediction.directions = factory.build($(data).find("predictions"));
+//            }
+//        });
+//    ///run DirectionFactory()?
+//    ///insert this new directions obj into selectedPredictions[i]
+//    ///if this fails, we need to inform the user that the displayed data has not been updated
+//
+//    }
+//
+//}
 
 function GetRoutePrediction(xml) {
     $.ajax({
@@ -44,10 +71,11 @@ function LoadViewModel(xml) {
     GetRoutePrediction(xml);
 }
 
+
 /////factories
 function RoutePredictionsFactory() {
     this.build = function($node) {
-        var routePredictions = new RoutePredictions($node.attr("agencyTitle"), $node.attr("routeTitle"), $node.attr("stopTitle"), $node.attr("stopTag")),
+        var routePredictions = new RoutePredictions($node.attr("agencyTitle"), $node.attr("routeTitle"), $node.attr("routeTag"), $node.attr("stopTitle"), $node.attr("stopTag")),
             directionFactory = new DirectionFactory();
 
         $node.find("direction").each(function() {
@@ -85,13 +113,14 @@ function VehiclePredictionFactory() {
 }
 
 /////constructors
-function RoutePredictions(agencyTitle, routeTitle, stopTitle, stopTag) {
+function RoutePredictions(agencyTitle, routeTitle, routeTag, stopTitle, stopTag) {
     this.agencyTitle = ko.observable(agencyTitle);
     this.routeTitle = ko.observable(routeTitle);
+    this.routeTag = ko.observable(routeTag);
     this.stopTitle = ko.observable(stopTitle);
     this.stopTag = ko.observable(stopTag);
     this.directions = ko.observableArray();
-    this.routeObjKey = routeTitle + stopTag;
+    this.routeObjKey = routeTag + stopTag;
 }
 
 function Direction(title) {

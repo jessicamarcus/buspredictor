@@ -2,7 +2,6 @@
 http://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf
 
 also list arrival estimates by local time of day
--> epochTime 4hrs ahead?
 
 reload data every 60 seconds, display last refresh time on screen
 
