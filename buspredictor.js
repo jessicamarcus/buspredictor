@@ -27,7 +27,7 @@ function BuspredictorViewModel() {
     };
 
 //    ///update VehiclePrediction nodes every 60sec
-//    self.updatePredictions = self.setInterval(refreshPredictionData(self.selectedPredictions), 6000);
+//    self.updatePredictions = self.setInterval(refreshPredictionData(self.selectedPredictions), 60000);
 
 }
 //function refreshPredictionData() {

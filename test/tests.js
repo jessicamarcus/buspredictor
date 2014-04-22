@@ -19,9 +19,25 @@ test("RoutePredictionsFactory.Build - With Predictions Data - Sets Correct Predi
     ok(testObject.routeObjKey == "892729", "routeObjKey is correct");
 });
 
+test("RoutePredictionsFactory.Build - sets correct children", function(){
+    // Arrange
+    var xmlDoc = $.parseXML('<body copyright="All data copyright MBTA 2014."><predictions agencyTitle="MBTA" routeTitle="89" routeTag="89" stopTitle="Broadway @ Main St" stopTag="2729"><direction title="Davis Square via Broadway"><prediction epochTime="1389204789480" seconds="720" minutes="12" isDeparture="false" affectedByLayover="true" dirTag="89_0_var0" vehicle="0630" block="G89_16" tripTag="21757870"/></direction></predictions></body>');
+    var factory = new RoutePredictionsFactory();
+    var $data = $(xmlDoc).find("predictions");
+
+    var testObject = factory.build($data);
+
+    var direction = testObject.direction[0];
+
+    var vehicle = direction.predictions[0];
+
+    // Assert
+    ok(testObject.direction[0] == "Davis Square via Broadway", "direction is correct");
+});
+
 test("DirectionFactory.Build - With Direction Data - Sets Correct Direction Properties", function(){
     // Arrange
-    var xmlDoc = $.parseXML('<body copyright="All data copyright MBTA 2014."><direction title="Davis Square via Broadway"><predictions agencyTitle="MBTA" routeTitle="89" routeTag="89" stopTitle="Broadway @ Main St" stopTag="2729"></predictions></direction></body>');
+    var xmlDoc = $.parseXML('<body copyright="All data copyright MBTA 2014."><predictions agencyTitle="MBTA" routeTitle="89" routeTag="89" stopTitle="Broadway @ Main St" stopTag="2729"><direction title="Davis Square via Broadway"></direction></predictions></body>');
     var factory = new DirectionFactory();
     var $data = $(xmlDoc).find("direction");
 
@@ -43,5 +59,16 @@ test("VehicleFactory.Build - With Vehicle Data - Sets Correct Vehicle Properties
 
     // Assert
     ok(testObject.epochTime() == utcToLocal12hrTime(1389204789480), "epoch time translated: correct");
+    ok(testObject.minutes() == "12", "12 minutes: correct")
+});
+
+test("refresh predictions data", function(){
+    // Arrange
+    var
+    setInterval(refreshPredictionData(self.selectedPredictions), 60000);
+    // Act
+
+
+    // Assert
     ok(testObject.minutes() == "12", "12 minutes: correct")
 });
