@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Personal Bus Predictor</title>
+    <meta content="width=device-width,initial-scale=1.0" name="viewport">
+    <link type="text/css" rel="stylesheet" href="./buspredictor.css" />
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.0.0.js"></script>
+    <script type="text/javascript" src="./buspredictor.js"></script>
+    <script type="text/javascript" src="./utc_handlers.js"></script>
+</head>
+<body>
+<h1>Personal Bus Predictor</h1>
+<p>THIS IS A WORK IN PROGRESS. More features will come soon. (4/24/2014)</p>
+<button type="button" onclick="LoadViewModel('http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=mbta&r=89&s=2703')">89 to Sullivan</button>
+<button type="button" onclick="LoadViewModel('http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=mbta&r=101&s=5303')">101 to Sullivan</button>
+<div data-bind="foreach: selectedPredictions">
+    <div class="prediction">
+        <p><span data-bind="text: agencyTitle" class="title"></span> <span class="title">Route </span>
+            <span data-bind="text: routeTitle" class="title"></span> <br />
+            Stop: <span data-bind="text: stopTitle"></span></p>
+        <div data-bind="foreach: directions">
+            <span data-bind="text: title" class="directionTitle"></span><br />
+            <span data-bind="foreach: predictions">
+                <div data-bind="css: {delayedBus: delayed() === 'true'}" class="displayedPrediction">
+                    <span data-bind="text: minutes"></span> minutes away / arrives at <span data-bind="text: epochTime"></span><br />
+                </div>
+            </span>
+        </div>
+        <div class="removePrediction"><a href="#" data-bind="click: $root.removeRoutePrediction">Remove prediction</a></div>
+    </div>
+</div>
+
+</body>
+</html>
