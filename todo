@@ -19,7 +19,7 @@ estimated time to arrival & estimated time of departure of another vehicle - how
 
 
 xml request format:
-http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=mbta&r=89&d=89_0_var0&s=2729&ts=2730
+http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=mbta&r=89&s=2729
 
 this is what a delayed bus looks like:
 <prediction epochTime="1389230543872" seconds="4273" minutes="71" isDeparture="false" affectedByLayover="true" delayed="true" slowness="0.491" dirTag="11_0_var0" vehicle="2221" block="C11_97" tripTag="22008479"/>

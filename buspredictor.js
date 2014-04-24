@@ -3,35 +3,35 @@ function BuspredictorViewModel() {
     self.selectedPredictions = ko.observableArray();
 
     self.addRoutePrediction = function(routeObj) {
-        ///always add the first routeObj
+        //always add the first routeObj
         if (self.selectedPredictions().length === 0) {
             self.selectedPredictions.push(routeObj);
         } else {
-            ///check if this prediction is already in the array
+            //check if this prediction is already in the array
             for (var i = 0; i < self.selectedPredictions().length; i++) {
                 var compareRouteObj = self.selectedPredictions()[i];
                 if (compareRouteObj.routeObjKey === routeObj.routeObjKey) {
-                    ///replace old prediction with new
+                    //replace old prediction with new
                     self.selectedPredictions[i] = routeObj;
                     return;
-                } ///else: do nothing and continue iterating through array
+                } //else: do nothing and continue iterating through array
             }
-            ///if this is a new routeObj, add it to the array
+            //if this is a new routeObj, add it to the array
             self.selectedPredictions.push(routeObj);
         }
     };
 
     self.removeRoutePrediction = function(prediction) {
-        ///removes selected prediction from view and array
+        //removes selected prediction from view and array
         self.selectedPredictions.remove(prediction);
     };
 
-//    ///update VehiclePrediction nodes every 60sec
+//    //update VehiclePrediction nodes every 60sec
 //    self.updatePredictions = self.setInterval(refreshPredictionData(self.selectedPredictions), 60000);
 
 }
-//function refreshPredictionData() {
-//    ///for each selectedPredictions[i]
+//function refreshPredictionsData() {
+//    //for each selectedPredictions[i]
 //    for (var i = 0; i < this.selectedPredictions().length; i++) {
 //    ///remove "directions" nodes
 //        var currentPrediction = this.selectedPredictions[i];
@@ -71,6 +71,17 @@ function LoadViewModel(xml) {
     GetRoutePrediction(xml);
 }
 
+//function nextbusService(xml) {
+//    $.ajax({
+//        type: "GET",
+//        url: xml,
+//        dataType: "xml",
+//        success: function(data) {
+//            var factory = new RoutePredictionsFactory();
+//            myModel.addRoutePrediction(factory.build($(data).find("predictions")));
+//        }
+//    });
+//}
 
 /////factories
 function RoutePredictionsFactory() {
