@@ -30,30 +30,15 @@ function BuspredictorViewModel() {
 //    self.updatePredictions = self.setInterval(refreshPredictionData(self.selectedPredictions), 60000);
 
 }
+
 //function refreshPredictionsData() {
-//    //for each selectedPredictions[i]
-//    for (var i = 0; i < this.selectedPredictions().length; i++) {
-//    ///remove "directions" nodes
-//        var currentPrediction = this.selectedPredictions[i];
-//        //currentPrediction.directions = /*remove directions entirely*/;
-//        ///OR can we just build a new directions obj and overwrite the old one??
-//    ///ajax request for fresh xml
-//        $.ajax({
-//            type: "GET",
-//            url: /*xml... how do we specify the path? do we need to store it on the predictions obj upon initial creation?*/,
-//            dataType: "xml",
-//            success: function(data) {
-//                var factory = new DirectionFactory();
-//                currentPrediction.directions = factory.build($(data).find("predictions"));
-//            }
-//        });
-//    ///run DirectionFactory()?
-//    ///insert this new directions obj into selectedPredictions[i]
-//    ///if this fails, we need to inform the user that the displayed data has not been updated
-//
+//        //for each selectedPredictions[i]
+//        for (var i = 0; i < self.selectedPredictions().length; i++) {
+////        var currentPrediction = myModel.selectedPredictions[i],
+//            var urlString = self.selectedPredictions[i]().restUrl;
+//            console.log(urlString);
+//        }
 //    }
-//
-//}
 
 function GetRoutePrediction(xml) {
     $.ajax({
@@ -63,7 +48,8 @@ function GetRoutePrediction(xml) {
         success: function(data) {
             var factory = new RoutePredictionsFactory();
             myModel.addRoutePrediction(factory.build($(data).find("predictions")));
-        }
+        },
+        error: function() { console.log("xml not returned") }
     });
 }
 
@@ -71,17 +57,13 @@ function LoadViewModel(xml) {
     GetRoutePrediction(xml);
 }
 
-//function nextbusService(xml) {
-//    $.ajax({
-//        type: "GET",
-//        url: xml,
-//        dataType: "xml",
-//        success: function(data) {
-//            var factory = new RoutePredictionsFactory();
-//            myModel.addRoutePrediction(factory.build($(data).find("predictions")));
-//        }
-//    });
-//}
+function refreshPredictionsData() {
+    generateURL();
+}
+
+function generateURL(routePrediction) {
+    return routePrediction.getUrl("http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=");
+};
 
 /////factories
 function RoutePredictionsFactory() {
@@ -132,6 +114,10 @@ function RoutePredictions(agencyTitle, routeTitle, routeTag, stopTitle, stopTag)
     this.stopTag = ko.observable(stopTag);
     this.directions = ko.observableArray();
     this.routeObjKey = routeTag + stopTag;
+    var self = this;
+    this.getUrl = function(baseUrl) {
+        return baseUrl += self.agencyTitle() + "&r=" + self.routeTag() + "&s=" + self.stopTag();
+    };
 }
 
 function Direction(title) {

@@ -71,7 +71,7 @@ test("generate Nextbus url from a prediction in selectedPredictions", function()
 
     // Act
     var myModel = factory.build($data);
-    predictionUrl += myModel.agencyTitle() + "&r=" + myModel.routeTag() + "&s=" + myModel.stopTag();
+    predictionUrl = myModel.getUrl(predictionUrl);
 
     // Assert
     ok(myModel.agencyTitle() == "MBTA", "check for correct agencyTitle value");
