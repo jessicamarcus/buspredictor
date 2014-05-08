@@ -15,7 +15,7 @@
 <button type="button" onclick="LoadViewModel('./89davis.xml')">89 to Davis</button>
 <button type="button" onclick="LoadViewModel('./89sullivan.xml')">89 to Sullivan</button>
 <button type="button" onclick="LoadViewModel('./101sullivan.xml')">101 to Sullivan</button>
-<button type="button" onclick="refreshPredictionsData()">Refresh Predictions</button>
+<button type="button" data-bind="click: refreshPredictionsData">Refresh Predictions</button>
 <div data-bind="foreach: selectedPredictions">
     <div class="prediction">
         <p><span data-bind="text: agencyTitle" class="title"></span> <span class="title">Route </span>

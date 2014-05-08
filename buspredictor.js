@@ -57,13 +57,26 @@ function LoadViewModel(xml) {
     GetRoutePrediction(xml);
 }
 
-function refreshPredictionsData() {
-    generateURL();
+function refreshPredictionsData(data) {
+    for (var i = 0; i < data.selectedPredictions().length; i++) {
+        var route = data.selectedPredictions()[i];
+//console.log(route.agencyTitle());
+        $.ajax({
+            type: "GET",
+            url: generateURL(route),
+            dataType: "xml",
+            success: function() {
+                console.log("success");
+                this.route = new RoutePredictionsFactory();
+            },
+            error: function() { console.log("xml not returned") }
+        });
+    }
 }
 
 function generateURL(routePrediction) {
     return routePrediction.getUrl("http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=");
-};
+}
 
 /////factories
 function RoutePredictionsFactory() {
@@ -107,6 +120,7 @@ function VehiclePredictionFactory() {
 
 /////constructors
 function RoutePredictions(agencyTitle, routeTitle, routeTag, stopTitle, stopTag) {
+    var self = this;
     this.agencyTitle = ko.observable(agencyTitle);
     this.routeTitle = ko.observable(routeTitle);
     this.routeTag = ko.observable(routeTag);
@@ -114,7 +128,6 @@ function RoutePredictions(agencyTitle, routeTitle, routeTag, stopTitle, stopTag)
     this.stopTag = ko.observable(stopTag);
     this.directions = ko.observableArray();
     this.routeObjKey = routeTag + stopTag;
-    var self = this;
     this.getUrl = function(baseUrl) {
         return baseUrl += self.agencyTitle() + "&r=" + self.routeTag() + "&s=" + self.stopTag();
     };
@@ -122,14 +135,16 @@ function RoutePredictions(agencyTitle, routeTitle, routeTag, stopTitle, stopTag)
 
 function Direction(title) {
     this.title = ko.observable(title);
-    this.predictions = ko.observableArray(); // array of prediction instances
+    // array of prediction instances
+    this.predictions = ko.observableArray();
 }
 
 function VehiclePrediction(minutes, isScheduleBased, epochTime, delayed, slowness) {
     this.minutes = ko.observable(minutes);
     this.isScheduleBased = ko.observable(isScheduleBased);
     this.epochTime = ko.observable(utcToLocal12hrTime(epochTime));
-    this.delayed = ko.observable(delayed); //these last two are not always present
+    //these last two are not always present
+    this.delayed = ko.observable(delayed);
     this.slowness = ko.observable(slowness);
 }
 
