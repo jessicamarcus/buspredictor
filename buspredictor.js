@@ -26,19 +26,48 @@ function BuspredictorViewModel() {
         self.selectedPredictions.remove(prediction);
     };
 
+    self.refreshRoutePredictions = function() {
+        //iterates through selectedPredictions and updates each with fresh data
+        for (var i = 0; i < self.selectedPredictions().length; i++) {
+            RoutePrediction.refresh(self.selectedPredictions()[i]);
+        }
+    };
+
 //    //update VehiclePrediction nodes every 60sec
 //    self.updatePredictions = self.setInterval(refreshPredictionData(self.selectedPredictions), 60000);
 
 }
 
-//function refreshPredictionsData() {
-//        //for each selectedPredictions[i]
-//        for (var i = 0; i < self.selectedPredictions().length; i++) {
-////        var currentPrediction = myModel.selectedPredictions[i],
-//            var urlString = self.selectedPredictions[i]().restUrl;
-//            console.log(urlString);
-//        }
-//    }
+var NextbusService = {
+    agencyList: function() {},
+    routeList: function() {},
+    //routeConfig command will list stops on a route
+    stopList: function() {},
+
+    refreshRoutePrediction: function(xml) {
+        $.ajax({
+            type: "GET",
+            url: generateURL(xml),
+            dataType: "xml",
+            success: function(data) {
+                RoutePrediction.refresh(data);
+            },
+            error: function() { console.log("xml not returned") }
+        });
+    }
+}
+
+var RoutePrediction = {
+    get: function(data) {
+        var factory = new RoutePredictionsFactory();
+        myModel.addRoutePrediction(factory.build($(data).find("predictions")));
+    },
+    refresh: function(data) {
+        var factory = new DirectionFactory();
+        myModel.refreshRoutePredictions(factory.build($(data).find("direction")));
+    }
+}
+
 
 function GetRoutePrediction(xml) {
     $.ajax({
@@ -55,23 +84,6 @@ function GetRoutePrediction(xml) {
 
 function LoadViewModel(xml) {
     GetRoutePrediction(xml);
-}
-
-function refreshPredictionsData(data) {
-    for (var i = 0; i < data.selectedPredictions().length; i++) {
-        var route = data.selectedPredictions()[i];
-//console.log(route.agencyTitle());
-        $.ajax({
-            type: "GET",
-            url: generateURL(route),
-            dataType: "xml",
-            success: function() {
-                console.log("success");
-                this.route = new RoutePredictionsFactory();
-            },
-            error: function() { console.log("xml not returned") }
-        });
-    }
 }
 
 function generateURL(routePrediction) {
