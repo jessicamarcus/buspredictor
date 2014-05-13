@@ -26,10 +26,11 @@ function BuspredictorViewModel() {
         self.selectedPredictions.remove(prediction);
     };
 
-    self.refreshRoutePredictions = function() {
+    self.refresh = function() {
         //iterates through selectedPredictions and updates each with fresh data
-        for (var i = 0; i < self.selectedPredictions().length; i++) {
-            RoutePrediction.refresh(self.selectedPredictions()[i]);
+        var predictions = self.predictions();
+        for (var i = 0; i < predictions.length; i++) {
+            predictions[i].refresh();
         }
     };
 
@@ -39,32 +40,14 @@ function BuspredictorViewModel() {
 }
 
 var NextbusService = {
-    agencyList: function() {},
-    routeList: function() {},
-    //routeConfig command will list stops on a route
-    stopList: function() {},
-
-    refreshRoutePrediction: function(xml) {
+    getRoutePrediction: function(url, callback) { // getRoutePrediction(myroute.getUrl(baseurl), callback)
         $.ajax({
             type: "GET",
-            url: generateURL(xml),
+            url: url,
             dataType: "xml",
-            success: function(data) {
-                RoutePrediction.refresh(data);
-            },
+            success: callback,
             error: function() { console.log("xml not returned") }
         });
-    }
-}
-
-var RoutePrediction = {
-    get: function(data) {
-        var factory = new RoutePredictionsFactory();
-        myModel.addRoutePrediction(factory.build($(data).find("predictions")));
-    },
-    refresh: function(data) {
-        var factory = new DirectionFactory();
-        myModel.refreshRoutePredictions(factory.build($(data).find("direction")));
     }
 }
 
@@ -140,11 +123,20 @@ function RoutePredictions(agencyTitle, routeTitle, routeTag, stopTitle, stopTag)
     this.stopTag = ko.observable(stopTag);
     this.directions = ko.observableArray();
     this.routeObjKey = routeTag + stopTag;
-    this.getUrl = function(baseUrl) {
-        return baseUrl += self.agencyTitle() + "&r=" + self.routeTag() + "&s=" + self.stopTag();
+    this.baseUrl = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=";
+    this.getUrl = function() {
+        return this.baseUrl += self.agencyTitle() + "&r=" + self.routeTag() + "&s=" + self.stopTag();
     };
+    this.refresh = function() {
+        NextbusService.getRoutePrediction(this.getUrl(), this.callback())
+    };
+    this.callback = function() {
+        this.directions.remove();
+        var factory = new DirectionFactory();
+        factory.build($(data).find("direction"));
+    }
 }
-
+//getRoutePrediction(myroute.getUrl(baseurl), callback)
 function Direction(title) {
     this.title = ko.observable(title);
     // array of prediction instances
