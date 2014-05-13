@@ -28,7 +28,7 @@ function BuspredictorViewModel() {
 
     self.refresh = function() {
         //iterates through selectedPredictions and updates each with fresh data
-        var predictions = self.predictions();
+        var predictions = self.selectedPredictions();
         for (var i = 0; i < predictions.length; i++) {
             predictions[i].refresh();
         }
@@ -49,7 +49,7 @@ var NextbusService = {
             error: function() { console.log("xml not returned") }
         });
     }
-}
+};
 
 
 function GetRoutePrediction(xml) {
@@ -128,12 +128,12 @@ function RoutePredictions(agencyTitle, routeTitle, routeTag, stopTitle, stopTag)
         return this.baseUrl += self.agencyTitle() + "&r=" + self.routeTag() + "&s=" + self.stopTag();
     };
     this.refresh = function() {
-        NextbusService.getRoutePrediction(this.getUrl(), this.callback())
+        NextbusService.getRoutePrediction(this.getUrl(), this.callback)
     };
-    this.callback = function() {
-        this.directions.remove();
+    this.callback = function(data) {
+//        this.remove(this.directions);
         var factory = new DirectionFactory();
-        factory.build($(data).find("direction"));
+        this.directions = factory.build($(data).find("direction"));
     }
 }
 //getRoutePrediction(myroute.getUrl(baseurl), callback)
