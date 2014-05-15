@@ -125,15 +125,18 @@ function RoutePredictions(agencyTitle, routeTitle, routeTag, stopTitle, stopTag)
     this.routeObjKey = routeTag + stopTag;
     this.baseUrl = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=";
     this.getUrl = function() {
-        return this.baseUrl += self.agencyTitle() + "&r=" + self.routeTag() + "&s=" + self.stopTag();
+        return self.baseUrl + self.agencyTitle().toLowerCase() + "&r=" + self.routeTag() + "&s=" + self.stopTag();
     };
     this.refresh = function() {
-        NextbusService.getRoutePrediction(this.getUrl(), this.callback)
+        NextbusService.getRoutePrediction(self.getUrl(), self.callback);
     };
     this.callback = function(data) {
-//        this.remove(this.directions);
         var factory = new DirectionFactory();
-        this.directions = factory.build($(data).find("direction"));
+        self.directions.removeAll();
+        $(data).find("direction").each(function() {
+            var dir = factory.build($(this));
+            self.directions.push(dir);
+        });
     }
 }
 //getRoutePrediction(myroute.getUrl(baseurl), callback)
