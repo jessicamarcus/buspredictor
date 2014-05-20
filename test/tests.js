@@ -75,5 +75,29 @@ test("generate Nextbus url from a prediction in selectedPredictions", function()
 
     // Assert
     ok(myModel.agencyTitle() == "MBTA", "check for correct agencyTitle value");
-    ok(predictionUrl == "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=MBTA&r=89&s=2729", "89 to Davis prediction");
+    ok(predictionUrl == "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=mbta&r=89&s=2729", "89 to Davis prediction");
+});
+
+test("get list of MBTA routes from nextbus", function(){
+    // Arrange
+    var NextbusService = {
+        baseUrl: "http://webservices.nextbus.com/service/publicXMLFeed?command=",
+        agencyTag: "mbta",
+        getRoutePrediction: function(url, callback) {
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "xml",
+                success: callback,
+                error: function() { console.log("xml not returned") }
+            });
+        },
+        getRouteList: function(agencyTag) {
+            var command = "routeList";
+        }
+    };
+    // Act
+
+    // Assert
+    ok(myModel.agencyTitle() == "MBTA", "check for correct agencyTitle value");
 });

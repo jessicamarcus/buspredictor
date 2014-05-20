@@ -51,7 +51,6 @@ var NextbusService = {
     }
 };
 
-
 function GetRoutePrediction(xml) {
     $.ajax({
         type: "GET",
@@ -67,10 +66,6 @@ function GetRoutePrediction(xml) {
 
 function LoadViewModel(xml) {
     GetRoutePrediction(xml);
-}
-
-function generateURL(routePrediction) {
-    return routePrediction.getUrl("http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=");
 }
 
 /////factories
@@ -139,7 +134,7 @@ function RoutePredictions(agencyTitle, routeTitle, routeTag, stopTitle, stopTag)
         });
     }
 }
-//getRoutePrediction(myroute.getUrl(baseurl), callback)
+
 function Direction(title) {
     this.title = ko.observable(title);
     // array of prediction instances
@@ -153,6 +148,10 @@ function VehiclePrediction(minutes, isScheduleBased, epochTime, delayed, slownes
     //these last two are not always present
     this.delayed = ko.observable(delayed);
     this.slowness = ko.observable(slowness);
+}
+
+function RouteList(tag, title, shortTitle) {
+    this.tag = ko.observable()
 }
 
 var myModel = new BuspredictorViewModel();
