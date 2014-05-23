@@ -48,13 +48,25 @@ var NextbusService = {
             success: callback,
             error: function() { console.log("xml not returned") }
         });
+    },
+    agencyList: function() {
+        $.ajax({
+            type: "GET",
+            url: "http://webservices.nextbus.com/service/publicXMLFeed?command=agencyList",
+            dataType: "xml",
+            success: function(data) {
+                var agencies = new AgencyListFactory();
+                // build and populate myModel.ddlAgency
+            },
+            error: function() { console.log("xml not returned") }
+        });
     }
 };
 
-function GetRoutePrediction(xml) {
+function GetRoutePrediction(url) {
     $.ajax({
         type: "GET",
-        url: xml,
+        url: url,
         dataType: "xml",
         success: function(data) {
             var factory = new RoutePredictionsFactory();
@@ -64,8 +76,8 @@ function GetRoutePrediction(xml) {
     });
 }
 
-function LoadViewModel(xml) {
-    GetRoutePrediction(xml);
+function LoadViewModel(url) {
+    GetRoutePrediction(url);
 }
 
 /////factories
@@ -106,6 +118,18 @@ function VehiclePredictionFactory() {
         );
         return prediction;
     };
+}
+
+function AgencyListFactory() {
+    this.build = function($node) {
+        var agencies = new AgencyList(
+            $node.attr("tag"),
+            $node.attr("title"),
+            $node.attr("regionTitle"),
+            $node.attr("shortTitle")
+        );
+        return agencies;
+    }
 }
 
 /////constructors
@@ -150,8 +174,12 @@ function VehiclePrediction(minutes, isScheduleBased, epochTime, delayed, slownes
     this.slowness = ko.observable(slowness);
 }
 
-function RouteList(tag, title, shortTitle) {
-    this.tag = ko.observable()
+function AgencyList(tag, title, regionTitle, shortTitle) {
+    this.tag = ko.observable(tag);
+    this.title = ko.observable(title);
+    this.regionTitle = ko.observable(regionTitle);
+    // shortTitle not always present
+    this.shortTitle = ko.observable(shortTitle);
 }
 
 var myModel = new BuspredictorViewModel();

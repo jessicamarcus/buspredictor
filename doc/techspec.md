@@ -7,13 +7,29 @@ Intent of T-Spec
         What is the end result of that action?
         What are all the things that happen to create that result?
 
-##Actors - describe all actors in the solution
+[ Management Expectations: ]
+[ BLOCKING ISSUES: (I can not complete my work without this resolved) ]
+[ - Found an error: ]
+[       If it's a small issue that you know the solution to... fix it.] 
+[       If you do not immediately know the solution, reach out]
+[ - Found a gap (missing logic REQUIRED for the feature to work) ]
+[       Reach out for discussion with T-Spec Reviewer first! ]
+[ NICE TO HAVES: ]
+[ - Thought about a new *feature* (exposed to user) that has not been documented]
+[       Document it as 'future feature' in FUNCTIONAL SPEC ]
+[ - Thought of new logic that has not been documented ]
+[       Document it as 'future enhancement' in TECHNICAL SPEC ]
+[       OR *IF* this may be required (ie, may be a GAP) ]
+[       Reach out and discuss ]
+
+
+###Actors - describe all actors in the solution
 selectedPredictions is an observable array which lives in the view model, BusPredictorViewModel.
 
-##Solution Description / Activity Description / Feature List
+###Solution Description / Activity Description / Feature List
 
 Refresh Route Information
-Feature #2
+##Feature #2 (approved)
 User clicks button =>
     BusPredictorViewModel.refresh() action loops over BusPredictorViewModel.selectedPredictions
         Calls RoutePrediction.refresh() on each routePrediction
@@ -33,29 +49,92 @@ BusPredictorViewModel
 RoutePrediction
     refresh() - refreshes routePrediction data by calling nextbus service
 NextBusService
-    getRoutePredictions(callback) - makes ajax call to nextbus to get predictions
+    getRoutePrediction(callback) - makes ajax call to nextbus to get predictions
 DirectionFactory
     build() - creates observable Direction viewmodel
 
-Feature 3:
-##NextbusService object
+##Feature 3: (Complete)
+[ Open issues: ]
+[ 1. DONE ensure all "Open Questions" from email answered ]
+[ 2. DONE All NextbusService methods should be named with a verbNoun() naming scheme ]
+[ 3. DONE Everything in Object Model should be completely described - including: ]
+[       all method parameters listed (input parameters should be listed) ]
+[       all items should have a description]
 
+##NextbusService object
 handles all communication with Nextbus's API
 
-###methods required:
-* agencyList (gets list of all agencies available)
-* routeList (gets list of routes for a given agency)
-* directionList (uses routeConfig to get list of available directions for the given route)
-* stopList (uses routeConfig command to get list of stops on a given route in one direction)
-* getRoutePrediction (uses predictions command to get live prediction data)
+##Object Model
+NextbusService
+    getAgencyList() - gets list of all agencies available
+    getRouteList(agencyTag) - gets list of routes for a given agency
+    getRouteConfig(routeTag) - gets directions and stops for a given route
+    baseUrl - "http://webservices.nextbus.com/service/publicXMLFeed?command="    
+    
+BusPredictorViewModel
+    allAgencies()[] - observable array of agencyList results
+    getPredictionUrl(stop) - generates url for a user-requested prediction, generates REST url for selected stop, and sends result to LoadViewModel()
+    ddlAgency_change() - event listener; upon selection in ddlAgency produces or updates routes()[]
+    ddlRoutes_change() - event listener; upon selection in ddlRoutes produces or updates directions()[]
+    ddlDirections_change() - event listener; upon selection in ddlDirections produces or updates stops()[]
+    ddlStops_change() - event listener; upon selection in ddlStops 
+agency
+    routes()[] - observable array of routes for the agency
+route
+    stops()[] - observable array of stops for the route
+    directions()[] - observable array of directions for the route   
+    getStops(direction) - matches up reference stops with definition stops, and returns direction.stops()[] which now contains titles 
+    
 
-###properties:
-* baseUrl (http://webservices.nextbus.com/service/publicXMLFeed?command=)
+Select Route for Prediction
+Page loads =>
+    BuspredictorViewModel.allAgencies[] is created as an observable array and given the value of:
+        NextbusService.agencyList() makes ajax call to nextbus server 
+            results are stored in BuspredictorViewModel.allAgencies[]
+            in view (class: ddlAgency), data-bind foreach: allAgencies, display only agencyTitle
 
+User selects an agency =>
+    BuspredictorViewModel.ddlAgency_change()
+        for selectedAgency in BuspredictorViewModel.allAgencies
+            if routes[] exists do nothing
+            if routes[] does not exist
+                NextbusService.routeList()
+                create new observable array selectedAgency.routes[]
+            populate view for ddlRoutes with selectedAgency.routes[]
 
+User selects a route =>
+    BuspredictorViewModel.ddlRoutes_change()
+        for selectedRoute in selectedAgency.routes[]
+            if stops[] exists do nothing
+            if stops[] does not exist
+                NextbusService.routeConfig()
+                    success:
+                        create observable array selectedRoute.stops[] - // These are stop DEFINITIONS (ie, the real stop data)
+                        create observable array selectedRoute.directions[]
+                            fill with directions -
+                                each direction should be filled with the reference stops (stop nodes that just have id)
+                            if direction titles are duplicated, merge all their stops into one direction
+             populate view for ddlDirections with selectedRoute.directions[]
 
-###prediction selection process
-* User selects from a list of transit agencies (NextbusService.agencyList) from "agency" dropdown (ddlAgency).
-* Selection in dropdown produces related list of routes (NextbusService.routeList), which populates a "routes" dropdown (ddlRoutes).
-* User chooses a route from dropdown. User then chooses the available directions (NextbusService.directionList) that appear in "directions" dropdown (ddlDirections).
-* Selected "direction" causes the "stops" dropdown (ddlStops) to appear. User chooses a stop, which creates a new RoutePrediction. (myModel.addRoutePrediction)
+User selects a direction =>
+    BuspredictorViewModel.ddlDirections_change()
+        for selectedDirection in selectedRoute.directions[]
+            route.getStops(direction) 
+                if selectedDirection.stops[0] doesn't have a title,
+                    getStops(selectedDirection.stops[i]) 
+            populate view for ddlStops with selectedDirection.stops.title[]
+
+User selects a stop =>
+    BuspredictorViewModel.ddlStops_change()
+        get selectedStop from selectedDirection.stops
+        BuspredictorViewModel.getPredictionUrl()
+            var url = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=" +
+                selectedAgency.agencyTitle().toLowerCase() + "&r=" + 
+                selectedRoute.tag() + "&s=" + 
+                selectedStop.tag()
+            LoadViewModel(url)
+
+## Future Enhancements
+1. Cache agencyList data
+2. NextBusService.UrlBuilder.getPredictionUrl(stop OR existing routePrediction)
+3. Include lat/long and other info into stops on direction.
