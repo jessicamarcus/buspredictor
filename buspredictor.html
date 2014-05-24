@@ -5,10 +5,6 @@
     <meta content="width=device-width,initial-scale=1.0" name="viewport">
     <link type="text/css" rel="stylesheet" href="./buspredictor.css" />
 
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.0.0.js"></script>
-    <script type="text/javascript" src="./buspredictor.js"></script>
-    <script type="text/javascript" src="./utc_handlers.js"></script>
 </head>
 <body>
 <h1>Personal Bus Predictor</h1>
@@ -16,6 +12,19 @@
 <button type="button" onclick="LoadViewModel('./89sullivan.xml')">89 to Sullivan</button>
 <button type="button" onclick="LoadViewModel('./101sullivan.xml')">101 to Sullivan</button>
 <button type="button" data-bind="click: refresh">Refresh Predictions</button>
+
+<div class="ddl" data-bind="visible: allAgencies().length > 0">
+    <select id="ddl_agencies" data-bind="options: allAgencies, optionsText: 'title', optionsCaption: 'Please select a transit agency:', selected: displayRoutes"></select>
+</div>
+
+<div class="ddl" data-bind="">
+    <select id="ddl_routes" data-bind="optionsText: 'title', optionsCaption: 'Please select a route:'">
+        <option>dummy entry</option>
+        <option>here's another one.</option>
+    </select>
+</div>
+
+
 <div data-bind="foreach: selectedPredictions">
     <div class="prediction">
         <p><span data-bind="text: agencyTitle" class="title"></span> <span class="title">Route </span>
@@ -33,5 +42,9 @@
     </div>
 </div>
 
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.0.0.js"></script>
+<script type="text/javascript" src="./buspredictor.js"></script>
+<script type="text/javascript" src="./utc_handlers.js"></script>
 </body>
 </html>

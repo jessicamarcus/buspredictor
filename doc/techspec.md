@@ -84,12 +84,11 @@ route
     stops()[] - observable array of stops for the route
     directions()[] - observable array of directions for the route   
     getStops(direction) - matches up reference stops with definition stops, and returns direction.stops()[] which now contains titles 
-    
 
 Select Route for Prediction
 Page loads =>
     BuspredictorViewModel.allAgencies[] is created as an observable array and given the value of:
-        NextbusService.agencyList() makes ajax call to nextbus server 
+        NextbusService.getAgencyList() makes ajax call to nextbus server 
             results are stored in BuspredictorViewModel.allAgencies[]
             in view (class: ddlAgency), data-bind foreach: allAgencies, display only agencyTitle
 
@@ -98,7 +97,7 @@ User selects an agency =>
         for selectedAgency in BuspredictorViewModel.allAgencies
             if routes[] exists do nothing
             if routes[] does not exist
-                NextbusService.routeList()
+                NextbusService.getRouteList()
                 create new observable array selectedAgency.routes[]
             populate view for ddlRoutes with selectedAgency.routes[]
 
@@ -107,7 +106,7 @@ User selects a route =>
         for selectedRoute in selectedAgency.routes[]
             if stops[] exists do nothing
             if stops[] does not exist
-                NextbusService.routeConfig()
+                NextbusService.getRouteConfig()
                     success:
                         create observable array selectedRoute.stops[] - // These are stop DEFINITIONS (ie, the real stop data)
                         create observable array selectedRoute.directions[]
@@ -138,3 +137,6 @@ User selects a stop =>
 1. Cache agencyList data
 2. NextBusService.UrlBuilder.getPredictionUrl(stop OR existing routePrediction)
 3. Include lat/long and other info into stops on direction.
+
+## Technical Debt
+1. Refactor factories into object literals, not functions.

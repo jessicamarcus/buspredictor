@@ -1,6 +1,7 @@
 function BuspredictorViewModel() {
     var self = this;
     self.selectedPredictions = ko.observableArray();
+    self.allAgencies = ko.observableArray();
 
     self.addRoutePrediction = function(routeObj) {
         //always add the first routeObj
@@ -37,6 +38,14 @@ function BuspredictorViewModel() {
 //    //update VehiclePrediction nodes every 60sec
 //    self.updatePredictions = self.setInterval(refreshPredictionData(self.selectedPredictions), 60000);
 
+    self.ddlAgency_change = function(selectedAgency) {
+
+        if (!selectedAgency.routes) {
+            NextbusService.getRouteList();
+        }
+    };
+
+    NextbusService.getAgencyList(); //produces initial selection dropdown
 }
 
 var NextbusService = {
@@ -49,14 +58,33 @@ var NextbusService = {
             error: function() { console.log("xml not returned") }
         });
     },
-    agencyList: function() {
+    getAgencyList: function() {
         $.ajax({
             type: "GET",
-            url: "http://webservices.nextbus.com/service/publicXMLFeed?command=agencyList",
+//            url: "http://webservices.nextbus.com/service/publicXMLFeed?command=agencyList",
+            url: "./data/agencylist.xml",
             dataType: "xml",
             success: function(data) {
-                var agencies = new AgencyListFactory();
-                // build and populate myModel.ddlAgency
+                $(data).find("agency").each(function(index, value) {
+                    var currentAgency = new AgencyListFactory(),
+                        agency = currentAgency.build($(value));
+                    myModel.allAgencies.push(agency);
+                    });
+                },
+            error: function() { console.log("xml not returned") }
+        });
+    },
+    getRouteList: function(selectedAgency) {
+        $.ajax({
+            type: "GET",
+            url: "./data/routelist.xml",
+            dataType: "xml",
+            success: function(data) {
+                $(data).find("route").each(function(index, value) {
+                    var currentRoute = new AgencyListFactory(),
+                        route = currentRoute.build($(value));
+                    selectedAgency.push(route);
+                });
             },
             error: function() { console.log("xml not returned") }
         });
@@ -91,7 +119,7 @@ function RoutePredictionsFactory() {
             routePredictions.directions.push(dir);
         });
         return routePredictions;
-    };
+    }
 }
 
 function DirectionFactory() {
@@ -104,7 +132,7 @@ function DirectionFactory() {
             direction.predictions.push(bus);
         });
         return direction;
-    };
+    }
 }
 
 function VehiclePredictionFactory() {
@@ -122,13 +150,16 @@ function VehiclePredictionFactory() {
 
 function AgencyListFactory() {
     this.build = function($node) {
-        var agencies = new AgencyList(
-            $node.attr("tag"),
-            $node.attr("title"),
-            $node.attr("regionTitle"),
-            $node.attr("shortTitle")
-        );
+        var agencies = new Agency($node.attr("tag"), $node.attr("title"), $node.attr("regionTitle"),$node.attr("shortTitle"));
+
         return agencies;
+    }
+}
+
+function RouteListFactory() {
+    this.build = function($node) {
+        var routes = new Route($node.attr("tag"), $node.attr("title"));
+        return routes;
     }
 }
 
@@ -174,7 +205,7 @@ function VehiclePrediction(minutes, isScheduleBased, epochTime, delayed, slownes
     this.slowness = ko.observable(slowness);
 }
 
-function AgencyList(tag, title, regionTitle, shortTitle) {
+function Agency(tag, title, regionTitle, shortTitle) {
     this.tag = ko.observable(tag);
     this.title = ko.observable(title);
     this.regionTitle = ko.observable(regionTitle);
@@ -182,8 +213,17 @@ function AgencyList(tag, title, regionTitle, shortTitle) {
     this.shortTitle = ko.observable(shortTitle);
 }
 
+function Route(tag, title) {
+    this.tag = ko.observable(tag);
+    this.title = ko.observable(title);
+}
+
 var myModel = new BuspredictorViewModel();
 
 $(document).ready(function() {
     ko.applyBindings(myModel);
+});
+
+$("#ddl_agencies").change(function() {
+    console.log("listener triggered");
 });
