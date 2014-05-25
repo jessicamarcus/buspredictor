@@ -3,6 +3,13 @@ function BuspredictorViewModel() {
     self.selectedPredictions = ko.observableArray();
     self.allAgencies = ko.observableArray();
 
+    self.stopPicker = {
+        selectedAgency: ko.observable(),
+        selectedRoute: ko.observable(),
+        selectedDirection: ko.observable(),
+        selectedStop: ko.observable()
+    };
+
     self.addRoutePrediction = function(routeObj) {
         //always add the first routeObj
         if (self.selectedPredictions().length === 0) {
@@ -38,10 +45,21 @@ function BuspredictorViewModel() {
 //    //update VehiclePrediction nodes every 60sec
 //    self.updatePredictions = self.setInterval(refreshPredictionData(self.selectedPredictions), 60000);
 
-    self.ddlAgency_change = function(selectedAgency) {
+    self.ddlAgencies_change = function(e) {
+        var selectedAgencyTag = $(e.target).val(),
+            a = self.allAgencies,
+            agency = {};
 
-        if (!selectedAgency.routes) {
-            NextbusService.getRouteList();
+        for (var i = 0; i < a().length; i++) {
+            agency = a()[i];
+            if (selectedAgencyTag === agency.tag()) {
+                self.stopPicker.selectedAgency = agency;
+
+                if (!agency.routes().length > 0) { //103
+                    NextbusService.getRouteList(agency); //104
+                }
+                return;
+            }
         }
     };
 
@@ -77,13 +95,15 @@ var NextbusService = {
     getRouteList: function(selectedAgency) {
         $.ajax({
             type: "GET",
-            url: "./data/routelist.xml",
+            url: "http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=" + selectedAgency.tag().toLowerCase(),
+//          url: "./data/routelist.xml",
             dataType: "xml",
             success: function(data) {
+                console.log("http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=" + selectedAgency.tag().toLowerCase());
                 $(data).find("route").each(function(index, value) {
-                    var currentRoute = new AgencyListFactory(),
+                    var currentRoute = new RouteListFactory(),
                         route = currentRoute.build($(value));
-                    selectedAgency.push(route);
+                    selectedAgency.routes().push(route);
                 });
             },
             error: function() { console.log("xml not returned") }
@@ -137,29 +157,25 @@ function DirectionFactory() {
 
 function VehiclePredictionFactory() {
     this.build = function($node) {
-        var prediction = new VehiclePrediction(
+        return new VehiclePrediction(
             $node.attr("minutes"),
             $node.attr("isScheduleBased"),
             $node.attr("epochTime"),
             $node.attr("delayed"),
             $node.attr("slowness")
         );
-        return prediction;
     };
 }
 
 function AgencyListFactory() {
     this.build = function($node) {
-        var agencies = new Agency($node.attr("tag"), $node.attr("title"), $node.attr("regionTitle"),$node.attr("shortTitle"));
-
-        return agencies;
+        return new Agency($node.attr("tag"), $node.attr("title"), $node.attr("regionTitle"),$node.attr("shortTitle"));
     }
 }
 
 function RouteListFactory() {
     this.build = function($node) {
-        var routes = new Route($node.attr("tag"), $node.attr("title"));
-        return routes;
+        return new Route($node.attr("tag"), $node.attr("title"));
     }
 }
 
@@ -206,6 +222,7 @@ function VehiclePrediction(minutes, isScheduleBased, epochTime, delayed, slownes
 }
 
 function Agency(tag, title, regionTitle, shortTitle) {
+    this.routes = ko.observableArray();
     this.tag = ko.observable(tag);
     this.title = ko.observable(title);
     this.regionTitle = ko.observable(regionTitle);
@@ -222,8 +239,10 @@ var myModel = new BuspredictorViewModel();
 
 $(document).ready(function() {
     ko.applyBindings(myModel);
-});
 
-$("#ddl_agencies").change(function() {
-    console.log("listener triggered");
+    ///// listeners
+    $("#ddl_agencies").change(myModel.ddlAgencies_change);
+    $("#ddl_routes").change(myModel.ddlRoutes_change);
+    $("#ddl_stops").change(myModel.ddlStops_change);
+
 });

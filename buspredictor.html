@@ -14,13 +14,11 @@
 <button type="button" data-bind="click: refresh">Refresh Predictions</button>
 
 <div class="ddl" data-bind="visible: allAgencies().length > 0">
-    <select id="ddl_agencies" data-bind="options: allAgencies, optionsText: 'title', optionsCaption: 'Please select a transit agency:', selected: displayRoutes"></select>
+    <select id="ddl_agencies" data-bind="options: allAgencies, optionsText: 'title', optionsValue: 'tag', optionsCaption: 'Please select a transit agency:'"></select>
 </div>
 
-<div class="ddl" data-bind="">
-    <select id="ddl_routes" data-bind="optionsText: 'title', optionsCaption: 'Please select a route:'">
-        <option>dummy entry</option>
-        <option>here's another one.</option>
+<div class="ddl">
+    <select id="ddl_routes" data-bind="options: stopPicker.selectedAgency.routes, optionsText: 'title', optionsValue: 'tag', optionsCaption: 'Please select a route:'">
     </select>
 </div>
 

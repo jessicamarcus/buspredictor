@@ -78,6 +78,10 @@ BusPredictorViewModel
     ddlRoutes_change() - event listener; upon selection in ddlRoutes produces or updates directions()[]
     ddlDirections_change() - event listener; upon selection in ddlDirections produces or updates stops()[]
     ddlStops_change() - event listener; upon selection in ddlStops 
+    stopPicker - object to store selected viewmodel for stop picker 
+        selectedAgency - currently selected agency
+        selectedRoute - currently selected route
+        selectedStop - currently selected stop 
 agency
     routes()[] - observable array of routes for the agency
 route
@@ -93,35 +97,35 @@ Page loads =>
             in view (class: ddlAgency), data-bind foreach: allAgencies, display only agencyTitle
 
 User selects an agency =>
-    BuspredictorViewModel.ddlAgency_change()
-        for selectedAgency in BuspredictorViewModel.allAgencies
-            if routes[] exists do nothing
-            if routes[] does not exist
-                NextbusService.getRouteList()
-                create new observable array selectedAgency.routes[]
-            populate view for ddlRoutes with selectedAgency.routes[]
+    ddl_agencies change event calls jquery listener 
+        BuspredictorViewModel.ddlAgency_change()
+            with the BuspredictorViewModel.stopPicker.selectedAgency from BuspredictorViewModel.allAgencies
+                if BuspredictorViewModel.stopPicker.selectedAgency.routes[] does not have items
+                    NextbusService.getRouteList()
+                        push each route in agency into observable array BuspredictorViewModel.stopPicker.selectedAgency.routes[]
+                populate view for ddlRoutes with BuspredictorViewModel.stopPicker.selectedAgency.routes[]
 
 User selects a route =>
     BuspredictorViewModel.ddlRoutes_change()
-        for selectedRoute in selectedAgency.routes[]
+        for BuspredictorViewModel.stopPicker.selectedRoute in BuspredictorViewModel.stopPicker.selectedAgency.routes[]
             if stops[] exists do nothing
             if stops[] does not exist
                 NextbusService.getRouteConfig()
                     success:
-                        create observable array selectedRoute.stops[] - // These are stop DEFINITIONS (ie, the real stop data)
-                        create observable array selectedRoute.directions[]
+                        create observable array BuspredictorViewModel.stopPicker.selectedRoute.stops[] - // These are stop DEFINITIONS (ie, the real stop data)
+                        create observable array BuspredictorViewModel.stopPicker.selectedRoute.directions[]
                             fill with directions -
                                 each direction should be filled with the reference stops (stop nodes that just have id)
                             if direction titles are duplicated, merge all their stops into one direction
-             populate view for ddlDirections with selectedRoute.directions[]
+             populate view for ddlDirections with BuspredictorViewModel.stopPicker.selectedRoute.directions[]
 
 User selects a direction =>
     BuspredictorViewModel.ddlDirections_change()
-        for selectedDirection in selectedRoute.directions[]
+        for BuspredictorViewModel.stopPicker.selectedDirection in selectedRoute.directions[]
             route.getStops(direction) 
-                if selectedDirection.stops[0] doesn't have a title,
-                    getStops(selectedDirection.stops[i]) 
-            populate view for ddlStops with selectedDirection.stops.title[]
+                if BuspredictorViewModel.stopPicker.selectedDirection.stops[0] doesn't have a title,
+                    getStops(BuspredictorViewModel.stopPicker.selectedDirection.stops[i]) 
+            populate view for ddlStops with BuspredictorViewModel.stopPicker.selectedDirection.stops.title[]
 
 User selects a stop =>
     BuspredictorViewModel.ddlStops_change()
@@ -140,3 +144,5 @@ User selects a stop =>
 
 ## Technical Debt
 1. Refactor factories into object literals, not functions.
+2. need to go back and change any for loops used to find objects in array and use underscore's find()
+3. AgencyListFactory and RouteListFactory should be AgencyFactory and RouteFactory
