@@ -3,12 +3,10 @@ function BuspredictorViewModel() {
     self.selectedPredictions = ko.observableArray();
     self.allAgencies = ko.observableArray();
 
-    self.stopPicker = {
-        selectedAgency: ko.observable(),
-        selectedRoute: ko.observable(),
-        selectedDirection: ko.observable(),
-        selectedStop: ko.observable()
-    };
+    self.selectedAgency = ko.observable();
+    self.selectedRoute = ko.observable();
+    self.selectedDirection = ko.observable();
+    self.selectedStop = ko.observable();
 
     self.addRoutePrediction = function(routeObj) {
         //always add the first routeObj
@@ -53,10 +51,10 @@ function BuspredictorViewModel() {
         for (var i = 0; i < a().length; i++) {
             agency = a()[i];
             if (selectedAgencyTag === agency.tag()) {
-                self.stopPicker.selectedAgency = agency;
+                self.selectedAgency = agency;
 
-                if (!agency.routes().length > 0) { //103
-                    NextbusService.getRouteList(agency); //104
+                if (!agency.routes().length > 0) {
+                    NextbusService.getRouteList(agency);
                 }
                 return;
             }
@@ -92,18 +90,18 @@ var NextbusService = {
             error: function() { console.log("xml not returned") }
         });
     },
-    getRouteList: function(selectedAgency) {
+    getRouteList: function(agency) {
         $.ajax({
             type: "GET",
-            url: "http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=" + selectedAgency.tag().toLowerCase(),
+            url: "http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=" + agency.tag().toLowerCase(),
 //          url: "./data/routelist.xml",
             dataType: "xml",
             success: function(data) {
-                console.log("http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=" + selectedAgency.tag().toLowerCase());
+                console.log("http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=" + agency.tag().toLowerCase());
                 $(data).find("route").each(function(index, value) {
                     var currentRoute = new RouteListFactory(),
                         route = currentRoute.build($(value));
-                    selectedAgency.routes().push(route);
+                    myModel.selectedAgency.routes.push(route);
                 });
             },
             error: function() { console.log("xml not returned") }

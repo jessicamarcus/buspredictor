@@ -13,12 +13,13 @@
 <button type="button" onclick="LoadViewModel('./101sullivan.xml')">101 to Sullivan</button>
 <button type="button" data-bind="click: refresh">Refresh Predictions</button>
 
-<div class="ddl" data-bind="visible: allAgencies().length > 0">
+<!--<div class="ddl" data-bind="visible: allAgencies().length > 0">-->
+<div class="ddl">
     <select id="ddl_agencies" data-bind="options: allAgencies, optionsText: 'title', optionsValue: 'tag', optionsCaption: 'Please select a transit agency:'"></select>
 </div>
 
-<div class="ddl">
-    <select id="ddl_routes" data-bind="options: stopPicker.selectedAgency.routes, optionsText: 'title', optionsValue: 'tag', optionsCaption: 'Please select a route:'">
+<div class="ddl"">
+    <select id="ddl_routes" data-bind="options: selectedAgency.routes, optionsText: 'title', optionsValue: 'tag', optionsCaption: 'Please select a route:'">
     </select>
 </div>
 
