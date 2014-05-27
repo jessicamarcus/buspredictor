@@ -84,7 +84,7 @@ var NextbusService = {
             dataType: "xml",
             success: function(data) {
                 $(data).find("agency").each(function(index, value) {
-                    var currentAgency = new AgencyListFactory(),
+                    var currentAgency = new AgencyFactory(),
                         agency = currentAgency.build($(value));
                     myModel.allAgencies.push(agency);
                     });
@@ -101,7 +101,7 @@ var NextbusService = {
             success: function(data) {
                 console.log("http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=" + agency.tag().toLowerCase());
                 $(data).find("route").each(function(index, value) {
-                    var currentRoute = new RouteListFactory(),
+                    var currentRoute = new RouteFactory(),
                         route = currentRoute.build($(value));
                     myModel.selectedAgency.routes.push(route);
                 });
@@ -167,73 +167,95 @@ function VehiclePredictionFactory() {
     };
 }
 
-function AgencyListFactory() {
+function AgencyFactory() {
     this.build = function($node) {
         return new Agency($node.attr("tag"), $node.attr("title"), $node.attr("regionTitle"),$node.attr("shortTitle"));
     }
 }
 
-function RouteListFactory() {
+function RouteFactory() {
     this.build = function($node) {
         return new Route($node.attr("tag"), $node.attr("title"));
     }
 }
 
 /////constructors
-function RoutePredictions(agencyTitle, routeTitle, routeTag, stopTitle, stopTag) {
-    var self = this;
-    this.agencyTitle = ko.observable(agencyTitle);
-    this.routeTitle = ko.observable(routeTitle);
-    this.routeTag = ko.observable(routeTag);
-    this.stopTitle = ko.observable(stopTitle);
-    this.stopTag = ko.observable(stopTag);
-    this.directions = ko.observableArray();
-    this.routeObjKey = routeTag + stopTag;
-    this.baseUrl = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=";
-    this.getUrl = function() {
-        return self.baseUrl + self.agencyTitle().toLowerCase() + "&r=" + self.routeTag() + "&s=" + self.stopTag();
-    };
-    this.refresh = function() {
-        NextbusService.getRoutePrediction(self.getUrl(), self.callback);
-    };
-    this.callback = function(data) {
-        var factory = new DirectionFactory();
-        self.directions.removeAll();
-        $(data).find("direction").each(function() {
-            var dir = factory.build($(this));
-            self.directions.push(dir);
-        });
+var RoutePredictions = Backbone.Model.extend({
+    constructor: function(agencyTitle, routeTitle, routeTag, stopTitle, stopTag) {
+        var self = this;
+        this.agencyTitle = agencyTitle;
+        this.routeTitle = routeTitle;
+        this.routeTag = routeTag;
+        this.stopTitle = stopTitle;
+        this.stopTag = stopTag;
+        this.directions = [];
+        this.routeObjKey = routeTag + stopTag;
+        this.baseUrl = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=";
+        this.getUrl = function() {
+            return self.baseUrl + self.agencyTitle().toLowerCase() + "&r=" + self.routeTag() + "&s=" + self.stopTag();
+        };
+        this.refresh = function() {
+            NextbusService.getRoutePrediction(self.getUrl(), self.callback);
+        };
+        this.callback = function(data) {
+            var factory = new DirectionFactory();
+            self.directions.removeAll();
+            $(data).find("direction").each(function() {
+                var dir = factory.build($(this));
+                self.directions.push(dir);
+            });
+        }
     }
-}
+});
 
-function Direction(title) {
-    this.title = ko.observable(title);
-    // array of prediction instances
-    this.predictions = ko.observableArray();
-}
+var Direction = Backbone.Model.extend({
+    constructor: function (title) {
+        this.title = title;
+        // array of prediction instances
+        this.predictions = [];
+    }
+});
 
-function VehiclePrediction(minutes, isScheduleBased, epochTime, delayed, slowness) {
-    this.minutes = ko.observable(minutes);
-    this.isScheduleBased = ko.observable(isScheduleBased);
-    this.epochTime = ko.observable(utcToLocal12hrTime(epochTime));
-    //these last two are not always present
-    this.delayed = ko.observable(delayed);
-    this.slowness = ko.observable(slowness);
-}
+var VehiclePrediction = Backbone.Model.extend({
+        constructor: function (minutes, isScheduleBased, epochTime, delayed, slowness) {
+        this.minutes = minutes;
+        this.isScheduleBased = isScheduleBased;
+        this.epochTime = utcToLocal12hrTime(epochTime);
+        //these last two are not always present
+        this.delayed = delayed;
+        this.slowness = slowness;
+    }
+});
 
-function Agency(tag, title, regionTitle, shortTitle) {
-    this.routes = ko.observableArray();
-    this.tag = ko.observable(tag);
-    this.title = ko.observable(title);
-    this.regionTitle = ko.observable(regionTitle);
-    // shortTitle not always present
-    this.shortTitle = ko.observable(shortTitle);
-}
+var Agency = Backbone.Model.extend({
+    constructor: function (tag, title, regionTitle, shortTitle) {
+        this.routes = [];
+        this.tag = tag;
+        this.title = title;
+        this.regionTitle = regionTitle;
+        // shortTitle not always present
+        this.shortTitle = shortTitle;
+    }
+});
 
-function Route(tag, title) {
-    this.tag = ko.observable(tag);
-    this.title = ko.observable(title);
-}
+var Route = Backbone.Model.extend ({
+    constructor: function (tag, title) {
+        this.tag = tag;
+        this.title = title;
+    }
+});
+
+//// Router
+//var BPRouter = Backbone.Router.extend({
+//    routes: {
+//        "": "predictor"
+//    }
+//});
+//
+//var myBPRouter = new BPRouter();
+//
+//Backbone.history.start;
+
 
 var myModel = new BuspredictorViewModel();
 

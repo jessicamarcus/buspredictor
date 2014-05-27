@@ -4,14 +4,29 @@
     <title>Personal Bus Predictor</title>
     <meta content="width=device-width,initial-scale=1.0" name="viewport">
     <link type="text/css" rel="stylesheet" href="./buspredictor.css" />
-    <!--<script data-main="js/main" src="js/require-2.1.2.min.js"></script>-->
+
 </head>
 <body>
 <h1>Personal Bus Predictor</h1>
-<button type="button" onclick="LoadViewModel('./89davis.xml')">89 to Davis</button>
-<button type="button" onclick="LoadViewModel('./89sullivan.xml')">89 to Sullivan</button>
-<button type="button" onclick="LoadViewModel('./101sullivan.xml')">101 to Sullivan</button>
+<button type="button" onclick="LoadViewModel('./data/89davis.xml')">89 to Davis</button>
+<button type="button" onclick="LoadViewModel('./data/89sullivan.xml')">89 to Sullivan</button>
+<button type="button" onclick="LoadViewModel('./data/101sullivan.xml')">101 to Sullivan</button>
 <button type="button" data-bind="click: refresh">Refresh Predictions</button>
+
+
+<div class="ddl">
+    <select id="ddl_agencies" data-bind="options: allAgencies, value: selectedAgency, optionsText: 'title', optionsCaption: 'Please select a transit agency:'"></select>
+</div>
+
+<div class="ddl" data-bind="visible: selectedAgency, with: selectedAgency">
+    <select id="ddl_routes" data-bind="options: routes, optionsText: 'title', optionsCaption: 'Please select a route:'">
+    </select>
+</div>
+
+<span data-bind="text: selectedAgency() ? selectedAgency().title : 'no title'"></span>
+<span data-bind="text: selectedAgency() ? selectedAgency().routes().tag : 'no tag'"></span>
+
+
 <div data-bind="foreach: selectedPredictions">
     <div class="prediction">
         <p><span data-bind="text: agencyTitle" class="title"></span> <span class="title">Route </span>
@@ -29,12 +44,11 @@
     </div>
 </div>
 
-
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.amd.min.js"></script>
 <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.0.0.js"></script>
+<script type="text/javascript" src="js/vendor/underscore-min.js"></script>
+<script type="text/javascript" src="js/vendor/backbone-min.js"></script>
+<script type="text/javascript" src="js/vendor/handlebars-v1.3.0.js"></script>
 <script type="text/javascript" src="js/app/buspredictor.js"></script>
 <script type="text/javascript" src="js/app/utc_handlers.js"></script>
 </body>
