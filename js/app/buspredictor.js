@@ -40,25 +40,27 @@ function BuspredictorViewModel() {
         }
     };
 
-//    //update VehiclePrediction nodes every 60sec
+//    //todo: update VehiclePrediction nodes every 60sec
 //    self.updatePredictions = self.setInterval(refreshPredictionData(self.selectedPredictions), 60000);
 
     self.ddlAgencies_change = function(e) {
-        var selectedAgencyTag = $(e.target).val(),
-            a = self.allAgencies,
-            agency = {};
-
-        for (var i = 0; i < a().length; i++) {
-            agency = a()[i];
-            if (selectedAgencyTag === agency.tag()) {
-                self.selectedAgency = agency;
-
-                if (!agency.routes().length > 0) {
-                    NextbusService.getRouteList(agency);
-                }
-                return;
-            }
-        }
+//        var selectedAgencyTag = $(e.target).val(),
+//            a = self.allAgencies,
+//            agency = {};
+//
+//        for (var i = 0; i < a().length; i++) {
+//            agency = a()[i];
+//            if (selectedAgencyTag === agency.tag()) {
+//                self.selectedAgency = agency;
+//
+//                if (!agency.routes().length > 0) {
+//                    NextbusService.getRouteList(agency);
+//                }
+//                return;
+//            }
+//        }
+        NextbusService.getRouteList(self.selectedAgency());
+        console.log(self.selectedAgency().tag());
     };
 
     NextbusService.getAgencyList(); //produces initial selection dropdown

@@ -1,12 +1,9 @@
-## FUNCTIONAL SPECIFICATION (Purpose is to explain each feature to the *user* in terms they understand)
+##NextbusService object
 
-### Feature 1 (completed): 
-User can see route information when they click the button for the route they wish to see. 
+handles all communication with Nextbus's API
 
-### Feature 2 (completed): 
-User can click on 'refresh' button to refresh the route information
-
-### Feature 3: 
-3a - User can choose a route from the Routes dropdown, which populates a dropdown with directions.
-3b - User then chooses a direction from the Directions dropdown, which populates a dropdown with stops.
-3c - User then chooses a stop from the Stops dropdown, which displays the desired route time information to the user
+###methods required:
+* agencyList (gets list of all agencies available)
+* routeList (gets list of routes for a given agency)
+* stopList (uses routeConfig command to get list of stops on a given route)
+* getRoutePrediction (uses predictions command to get live prediction data)
