@@ -131,7 +131,7 @@ function LoadViewModel(url) {
 /////factories
 function RoutePredictionsFactory() {
     this.build = function($node) {
-        var routePredictions = new RoutePredictions($node.attr("agencyTitle"), $node.attr("routeTitle"), $node.attr("routeTag"), $node.attr("stopTitle"), $node.attr("stopTag")),
+        var routePredictions = new RoutePredictions({agencyTitle: $node.attr("agencyTitle"), routeTitle: $node.attr("routeTitle"), routeTag: $node.attr("routeTag"), stopTitle: $node.attr("stopTitle"), stopTag: $node.attr("stopTag")}),
             directionFactory = new DirectionFactory();
 
         $node.find("direction").each(function() {
@@ -144,7 +144,7 @@ function RoutePredictionsFactory() {
 
 function DirectionFactory() {
     this.build = function($node) {
-        var direction = new Direction($node.attr("title")),
+        var direction = new Direction({ title: $node.attr("title")}),
             vehiclePredictionFactory = new VehiclePredictionFactory();
 
         $node.find("prediction").each(function() {
@@ -157,54 +157,43 @@ function DirectionFactory() {
 
 function VehiclePredictionFactory() {
     this.build = function($node) {
-        return new VehiclePrediction(
-            $node.attr("minutes"),
-            $node.attr("isScheduleBased"),
-            $node.attr("epochTime"),
-            $node.attr("delayed"),
-            $node.attr("slowness")
-        );
+        return new VehiclePrediction({
+                minutes: $node.attr("minutes"), isScheduleBased: $node.attr("isScheduleBased"), epochTime: utcToLocal12hrTime($node.attr("epochTime")), delayed: $node.attr("delayed"), slowness: $node.attr("slowness")});
     };
 }
 
 function AgencyFactory() {
     this.build = function($node) {
-        return new Agency($node.attr("tag"), $node.attr("title"), $node.attr("regionTitle"),$node.attr("shortTitle"));
+        return new Agency({ tag: $node.attr("tag"), title: $node.attr("title"), regionTitle: $node.attr("regionTitle"), shortTitle: $node.attr("shortTitle")});
     }
 }
 
 function RouteFactory() {
     this.build = function($node) {
-        return new Route($node.attr("tag"), $node.attr("title"));
+        return new Route({ tag: $node.attr("tag"), title: $node.attr("title")});
     }
 }
 
 /////constructors
 var RoutePredictions = Backbone.Model.extend({
-    constructor: function(agencyTitle, routeTitle, routeTag, stopTitle, stopTag) {
-        var self = this;
-        this.agencyTitle = agencyTitle;
-        this.routeTitle = routeTitle;
-        this.routeTag = routeTag;
-        this.stopTitle = stopTitle;
-        this.stopTag = stopTag;
-        this.directions = [];
-        this.routeObjKey = routeTag + stopTag;
-        this.baseUrl = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=";
-        this.getUrl = function() {
+//    initialize: {
+//        directions = [];
+//routeObjKey = routeTag + stopTag;
+//baseUrl = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=";
+//},
+    getUrl: function() {
             return self.baseUrl + self.agencyTitle().toLowerCase() + "&r=" + self.routeTag() + "&s=" + self.stopTag();
-        };
-        this.refresh = function() {
+    },
+    refresh: function() {
             NextbusService.getRoutePrediction(self.getUrl(), self.callback);
-        };
-        this.callback = function(data) {
-            var factory = new DirectionFactory();
-            self.directions.removeAll();
-            $(data).find("direction").each(function() {
-                var dir = factory.build($(this));
-                self.directions.push(dir);
-            });
-        }
+    },
+    callback: function(data) {
+        var factory = new DirectionFactory();
+        self.directions.removeAll();
+        $(data).find("direction").each(function() {
+            var dir = factory.build($(this));
+            self.directions.push(dir);
+        });
     }
 });
 
@@ -216,34 +205,11 @@ var Direction = Backbone.Model.extend({
     }
 });
 
-var VehiclePrediction = Backbone.Model.extend({
-        constructor: function (minutes, isScheduleBased, epochTime, delayed, slowness) {
-        this.minutes = minutes;
-        this.isScheduleBased = isScheduleBased;
-        this.epochTime = utcToLocal12hrTime(epochTime);
-        //these last two are not always present
-        this.delayed = delayed;
-        this.slowness = slowness;
-    }
-});
+var VehiclePrediction = Backbone.Model.extend();
 
-var Agency = Backbone.Model.extend({
-    constructor: function (tag, title, regionTitle, shortTitle) {
-        this.routes = [];
-        this.tag = tag;
-        this.title = title;
-        this.regionTitle = regionTitle;
-        // shortTitle not always present
-        this.shortTitle = shortTitle;
-    }
-});
+var Agency = Backbone.Model.extend();
 
-var Route = Backbone.Model.extend ({
-    constructor: function (tag, title) {
-        this.tag = tag;
-        this.title = title;
-    }
-});
+var Route = Backbone.Model.extend ();
 
 //// Router
 //var BPRouter = Backbone.Router.extend({
@@ -256,6 +222,31 @@ var Route = Backbone.Model.extend ({
 //
 //Backbone.history.start;
 
+var allAgencies = Backbone.Collection.extend({
+    model: Agency,
+    url: "./data.agencylist.xml",
+    parse: function (data) {
+        var parsed = [];
+        $(data).find("agency").each(function(index, value) {
+            var currentAgency = new AgencyFactory(),
+                agency = currentAgency.build($(value));
+            parsed.push(agency);
+        });
+        return parsed;
+    },
+    fetch: function (options) {
+        options = options || {};
+        options.dataType = "xml";
+        return Backbone.Collection.prototype.fetch.call(this, options);
+    }
+});
+
+var selectedPredictions = Backbone.Collection.extend({
+    model: RoutePredictions
+});
+
+var testItem = new allAgencies();
+testItem.fetch();
 
 var myModel = new BuspredictorViewModel();
 
