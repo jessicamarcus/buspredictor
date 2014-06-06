@@ -7,22 +7,32 @@
 </head>
 <body>
 
-<div id="agencyList"></div>
+<select id="agencyList">
+
+</select>
+
+<!--<script id="listTemplate" type="text/template">-->
+    <!--<ul>-->
+        <!--<li><%= tag %></li>-->
+        <!--<li><%= title %></li>-->
+        <!--<li><%= regionTitle %></li>-->
+    <!--</ul>-->
+<!--</script>-->
 
 <script id="agency-template" type="text/x-handlebars-template">
-    <select>
-        <option selected>Please select an agency:</option>
-        {{#each []}}
-        <option>{{ title }}</option>>
-        {{/each}}
-    </select>
+        <!--<option selected>Please select an agency:</option>-->
+        <option class="agency-item" id="{{ tag }}">{{ title }}</option>
 </script>
 
-<script type="text/javascript" src="js/vendor/jquery-1.11.1.js"></script>
-<script type="text/javascript" src="js/vendor/underscore.js"></script>
-<script type="text/javascript" src="js/vendor/backbone.js"></script>
-<script type="text/javascript" src="js/vendor/handlebars-v1.3.0.js"></script>
-<script type="text/javascript" src="learning.js"></script>
+<script type="text/javascript" src="js/lib/jquery-1.11.1.js"></script>
+<script type="text/javascript" src="js/lib/underscore.js"></script>
+<script type="text/javascript" src="js/lib/backbone.js"></script>
+<script type="text/javascript" src="js/lib/handlebars-v1.3.0.js"></script>
+<script type="text/javascript" src="js/models/agency.js"></script>
+<script type="text/javascript" src="js/collections/agencylist.js"></script>
+<script type="text/javascript" src="js/views/agency.js"></script>
+<script type="text/javascript" src="js/views/agencylist.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
 
 </body>
 </html>
