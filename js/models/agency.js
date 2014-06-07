@@ -1,10 +1,14 @@
-define(["underscore", "backbone"],
-    function(_, Backbone) {
+define(["backbone"],
+    function (Backbone) {
+        //model: Agency
         return Backbone.Model.extend({
             defaults: {
+                //routes: [],
                 tag: "no tag",
                 title: "no title",
-                regionTitle: "no regionTitle"
+                regionTitle: "no regionTitle",
+                //not always present:
+                shortTitle: ""
             }
         });
 });

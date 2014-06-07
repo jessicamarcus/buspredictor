@@ -16,16 +16,16 @@ require.config({
     }
 });
 
-require(["jquery", "views/agencylistView"], function($, ListView) {
+require(["jquery", "views/agencylistView"], function ($, ListView) {
 
-    $(function() {
-        var agencyList = [
-            { tag: "test1", title: "First Agency", regionTitle: "Region"},
-            { tag: "test2", title: "Second Agency", regionTitle: "Region"},
-            { tag: "test3", title: "Third Agency", regionTitle: "Region"}
-        ];
+    $(function () {
+//        var agencyList = [
+//            { tag: "test1", title: "First Agency", regionTitle: "Region"},
+//            { tag: "test2", title: "Second Agency", regionTitle: "Region"},
+//            { tag: "test3", title: "Third Agency", regionTitle: "Region"}
+//        ];
 
-        new ListView(agencyList);
+        new ListView();
     });
 
 });

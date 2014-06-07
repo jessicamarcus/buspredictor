@@ -4,10 +4,12 @@ define(["jquery", "backbone", "collections/agencylist", "views/agencyView"],
     return Backbone.View.extend({
         el: "#agencyList",
 
-        initialize: function (agencyList) {
-            //create the collection
-            this.collection = new AgencyList(agencyList);
+        initialize: function () {
+            this.collection = new AgencyList();
+            this.collection.fetch({reset: true});
             this.render();
+
+            this.listenTo(this.collection, "reset", this.render);
         },
 
         render: function () {
