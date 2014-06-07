@@ -1,10 +1,12 @@
-var app = app || {};
+define(["backbone", "models/agency"],
+    function(Backbone, Agency) {
 
-app.AgencyList = Backbone.Collection.extend({
-    model: app.Agency
-//    url: "data/agencylist.xml",
-//
-//    parse: function(data) {
-//
-//    }
+        return Backbone.Collection.extend({
+            model: Agency
+    //    url: "data/agencylist.xml",
+    //
+    //    parse: function(data) {
+    //
+    //    }
+        });
 });
