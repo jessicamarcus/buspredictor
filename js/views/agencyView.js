@@ -1,4 +1,4 @@
-define(["backbone", "handlebars", "text!views/agencyTemplate.html"],
+define(["backbone", "handlebars", "text!views/templates/agencyTemplate.html"],
     function(Backbone, Handlebars, AgencyTemplate) {
 
         return Backbone.View.extend({

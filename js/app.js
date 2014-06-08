@@ -16,7 +16,7 @@ require.config({
     }
 });
 
-require(["jquery", "views/agencylistView"], function ($, ListView) {
+require(["jquery", "views/agencylistView"], function ($, AgencyListView) {
 
     $(function () {
 //        var agencyList = [
@@ -25,7 +25,7 @@ require(["jquery", "views/agencylistView"], function ($, ListView) {
 //            { tag: "test3", title: "Third Agency", regionTitle: "Region"}
 //        ];
 
-        new ListView();
+        new AgencyListView();
     });
 
 });

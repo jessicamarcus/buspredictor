@@ -1,11 +1,11 @@
-define(["jquery", "backbone", "models/agency"],
-    function ($, Backbone, Agency) {
+define(["jquery", "backbone", "models/route"],
+    function ($, Backbone, Route) {
 
-        //collection: AgencyList
+        //collection: RouteList
         return Backbone.Collection.extend({
-            model: Agency,
-            //url: "http://webservices.nextbus.com/service/publicXMLFeed?command=agencyList",
-            url: "data/agencylist.xml",
+            model: Route,
+            //url: "http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=" + agency.tag().toLowerCase()",
+            url: "data/routelist.xml",
 
             fetch: function (options) {
                 options || (options = {});
@@ -16,16 +16,14 @@ define(["jquery", "backbone", "models/agency"],
             parse: function (data) {
                 var parsed = [],
                     content;
-                $(data).find("agency").each(function (index) {
+                $(data).find("route").each(function (index) {
                     content = $(this);
                     parsed.push({
                         tag: content.attr("tag"),
-                        title: content.attr("title"),
-                        regionTitle: content.attr("regionTitle"),
-                        shortTitle: content.attr("shortTitle")
+                        title: content.attr("title")
                     });
                 });
                 return parsed;
             }
+        });
     });
-});
