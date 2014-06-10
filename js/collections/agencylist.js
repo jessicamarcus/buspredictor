@@ -29,7 +29,7 @@ define(["jquery", "backbone", "models/agency"],
             },
 
             getRoutes: function (agency) {
-//                run createRoutes on agency
+//                run createRoutes on agency in collection
             }
     });
 });

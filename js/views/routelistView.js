@@ -1,10 +1,11 @@
-define(["jquery", "backbone", "collections/routelist", "views/routeView"],
-    function ($, Backbone, RouteList, RouteView) {
+define(["backbone", "handlebars", "collections/routelist", "text!views/templates/routeTemplate.html"],
+    function (Backbone, Handlebars, RouteList, RouteTemplate) {
 
         return Backbone.View.extend({
             el: "#routeList",
 
             initialize: function () {
+                this.$el.change(this.requestConfig);
 //                this.collection = new RouteList();
 //                this.collection.fetch({reset: true});
                 this.render();
@@ -12,21 +13,20 @@ define(["jquery", "backbone", "collections/routelist", "views/routeView"],
                 this.listenTo(this.collection, "reset", this.render);
             },
 
+            itemTemplate: Handlebars.compile(RouteTemplate),
+
             render: function () {
                 //each item in collection
                 this.collection.each(function (item) {
                     //render the item
-                    this.renderRoute(item);
+                    this.$el.append(this.itemTemplate(item.toJSON()));
                 }, this);
             },
 
-            renderRoute: function (item) {
-                var routeView = new RouteView({
-                    model: item
-                });
-
-                this.$el.append(routeView.render().el);
+            requestConfig: function () {
+                //do stuff
             }
+
         });
 
     });

@@ -1,16 +1,16 @@
-define(["jquery", "backbone", "models/agency", "collections/agencylist", "views/agencyView"],
-    function($, Backbone, Agency, AgencyList, AgencyView) {
+define(["backbone", "handlebars", "collections/agencylist", "text!views/templates/agencyTemplate.html"],
+    function (Backbone, Handlebars, AgencyList, AgencyTemplate) {
 
     return Backbone.View.extend({
         el: "#agencyList",
 
         events: {
 //            "click select": $("#routes-ddl").removeClass("inactive-ddl")
-            "change select": this.requestRoutes
+//            "change #agencyList": this.requestRoutes
         },
 
         initialize: function () {
-//            this.$el.change(this.requestRoutes);
+            this.$el.change(this.requestRoutes);
             this.collection = new AgencyList();
             //go get data from server
             this.collection.fetch({reset: true});
@@ -19,41 +19,24 @@ define(["jquery", "backbone", "models/agency", "collections/agencylist", "views/
             this.listenTo(this.collection, "reset", this.render);
         },
 
+        itemTemplate: Handlebars.compile(AgencyTemplate),
+
         render: function () {
             //each item in collection
             this.collection.each(function (item) {
                 //render the item
-                this.renderAgency(item);
+                this.$el.append(this.itemTemplate(item.toJSON()));
             }, this);
         },
 
-        renderAgency: function (item) {
-            var agencyView = new AgencyView({
-                model: item
-            });
-
-            this.$el.append(agencyView.render().el);
-        },
-
         requestRoutes: function () {
-            var selectedRoute = $(this).val();
-            console.log(selectedRoute);
+            var routeTag = document.getElementById("agencyList").value;
+
+            console.log(routeTag);
 //            selectedAgencyObj.createRoutes(selectedRoute);
-            console.log(AgencyList.length);
-            var result = AgencyList.findWhere({tag: selectedRoute});
-            console.log(result.length);
+//            var result = AgencyList.findWhere({tag: selectedRoute});
+//            console.log(result.length);
 
-
-            //each item in collection
-//            this.collection.each(function (agency) {
-//                //render the item
-//                agency.routes = new RouteList();
-//            }, this);
-//        },
-//        testFind: function () {
-//            if (this.collection.contains(this.collection.models, "554")) {
-//                console.log("contains, true")
-//            }
         }
     });
 
