@@ -1,21 +1,22 @@
-define(["jquery", "backbone", "collections/agencylist", "views/agencyView", "views/routelistView"],
-    function($, Backbone, AgencyList, AgencyView, RouteListView) {
+define(["jquery", "backbone", "models/agency", "collections/agencylist", "views/agencyView"],
+    function($, Backbone, Agency, AgencyList, AgencyView) {
 
     return Backbone.View.extend({
         el: "#agencyList",
 
-//        events: {
-//            "change select": "getRoutes"
-//        },
+        events: {
+//            "click select": $("#routes-ddl").removeClass("inactive-ddl")
+            "change select": this.requestRoutes
+        },
 
         initialize: function () {
+//            this.$el.change(this.requestRoutes);
             this.collection = new AgencyList();
             //go get data from server
             this.collection.fetch({reset: true});
             this.render();
 
             this.listenTo(this.collection, "reset", this.render);
-            this.listenTo(this.collection, "reset", this.getRoutes);
         },
 
         render: function () {
@@ -34,14 +35,25 @@ define(["jquery", "backbone", "collections/agencylist", "views/agencyView", "vie
             this.$el.append(agencyView.render().el);
         },
 
-        getRoutes: function () {
+        requestRoutes: function () {
+            var selectedRoute = $(this).val();
+            console.log(selectedRoute);
+//            selectedAgencyObj.createRoutes(selectedRoute);
+            console.log(AgencyList.length);
+            var result = AgencyList.findWhere({tag: selectedRoute});
+            console.log(result.length);
+
+
             //each item in collection
-            this.collection.each(function (agency) {
-                //render the item
-                agency.routes = new RouteListView({
-                    model: agency
-                });
-            }, this);
+//            this.collection.each(function (agency) {
+//                //render the item
+//                agency.routes = new RouteList();
+//            }, this);
+//        },
+//        testFind: function () {
+//            if (this.collection.contains(this.collection.models, "554")) {
+//                console.log("contains, true")
+//            }
         }
     });
 

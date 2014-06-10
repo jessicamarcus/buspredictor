@@ -5,8 +5,8 @@ define(["jquery", "backbone", "collections/routelist", "views/routeView"],
             el: "#routeList",
 
             initialize: function () {
-                this.collection = new RouteList();
-                this.collection.fetch({reset: true});
+//                this.collection = new RouteList();
+//                this.collection.fetch({reset: true});
                 this.render();
 
                 this.listenTo(this.collection, "reset", this.render);

@@ -16,7 +16,7 @@ define(["jquery", "backbone", "models/agency"],
             parse: function (data) {
                 var parsed = [],
                     content;
-                $(data).find("agency").each(function (index) {
+                $(data).find("agency").each(function () {
                     content = $(this);
                     parsed.push({
                         tag: content.attr("tag"),
@@ -26,6 +26,10 @@ define(["jquery", "backbone", "models/agency"],
                     });
                 });
                 return parsed;
+            },
+
+            getRoutes: function (agency) {
+//                run createRoutes on agency
             }
     });
 });

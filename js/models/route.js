@@ -1,6 +1,6 @@
 define(["backbone"],
     function (Backbone) {
-        //model: Route
+        //Route model
         return Backbone.Model.extend({
             defaults: {
                 tag: "no tag",
