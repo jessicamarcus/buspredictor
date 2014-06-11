@@ -25,7 +25,7 @@ require(["jquery", "views/agencylistView"], function ($, AgencyListView) {
 //            { tag: "test3", title: "Third Agency", regionTitle: "Region"}
 //        ];
 
-        new AgencyListView();
+        var view = new AgencyListView();
     });
 
 });

@@ -5,17 +5,24 @@ define(["backbone", "handlebars", "collections/routelist", "text!views/templates
             el: "#routeList",
 
             initialize: function () {
-                this.$el.change(this.requestConfig);
+                var self = this;
+                this.$el.change(function () {
+                        var routeTag = $("#routeList").val();
+                        self.selectedRoute = self.collection.findWhere({tag: routeTag});
+                        self.selectedRoute.loadConfig();
+                    }
+                );
 //                this.collection = new RouteList();
 //                this.collection.fetch({reset: true});
-                this.render();
+                //this.render();
 
-                this.listenTo(this.collection, "reset", this.render);
             },
 
             itemTemplate: Handlebars.compile(RouteTemplate),
 
             render: function () {
+                // clear child DOM
+                this.$el.html('');
                 //each item in collection
                 this.collection.each(function (item) {
                     //render the item
@@ -24,7 +31,9 @@ define(["backbone", "handlebars", "collections/routelist", "text!views/templates
             },
 
             requestConfig: function () {
+
                 //do stuff
+                console.log("requestConfig fired");
             }
 
         });

@@ -9,9 +9,16 @@ define(["backbone", "collections/routelist"],
                 //not always present:
                 shortTitle: ""
             },
-            createRoutes: function (agencyTag) {
-                this.routes = new RouteList(agencyTag.toLowerCase());
-                console.log("createRoutes fired");
+            getRoutes: function(callback) {
+                if (!this.routes) {
+                    //make child collection of routes upon user selection
+                    this.routes = new RouteList();
+                    this.routes.agencyTag = this.attributes.tag.toLowerCase();
+                    this.routes.fetch({reset: true, success: callback });
+                }
+                else {
+                    callback.call(this);
+                }
             }
         });
 });

@@ -1,5 +1,5 @@
-define(["backbone", "handlebars", "collections/agencylist", "text!views/templates/agencyTemplate.html"],
-    function (Backbone, Handlebars, AgencyList, AgencyTemplate) {
+define(["jquery", "backbone", "handlebars", "underscore", "collections/agencylist", "views/routelistView", "text!views/templates/agencyTemplate.html"],
+    function ($, Backbone, Handlebars, _, AgencyList, RouteListView, AgencyTemplate) {
 
     return Backbone.View.extend({
         el: "#agencyList",
@@ -10,12 +10,28 @@ define(["backbone", "handlebars", "collections/agencylist", "text!views/template
         },
 
         initialize: function () {
-            this.$el.change(this.requestRoutes);
+            var self = this;
+            this.$el.change(function () {
+                var agencyTag = $("#agencyList").val();
+                self.selectedAgency = self.collection.findWhere({tag: agencyTag});
+
+                //when user makes selection on this dropdown, request given agency's routes
+                self.selectedAgency.getRoutes(function () {
+
+                    //and display route dropdown with self.selectedAgency.routes
+                    if (self.routeListView) {
+                        self.routeListView.collection = self.selectedAgency.routes;
+                    }
+                    else {
+                        self.routeListView = new RouteListView({collection: self.selectedAgency.routes});
+                    }
+                    self.routeListView.render();
+                });
+            });
             this.collection = new AgencyList();
             //go get data from server
             this.collection.fetch({reset: true});
             this.render();
-
             this.listenTo(this.collection, "reset", this.render);
         },
 
@@ -27,16 +43,6 @@ define(["backbone", "handlebars", "collections/agencylist", "text!views/template
                 //render the item
                 this.$el.append(this.itemTemplate(item.toJSON()));
             }, this);
-        },
-
-        requestRoutes: function () {
-            var routeTag = document.getElementById("agencyList").value;
-
-            console.log(routeTag);
-//            selectedAgencyObj.createRoutes(selectedRoute);
-//            var result = AgencyList.findWhere({tag: selectedRoute});
-//            console.log(result.length);
-
         }
     });
 

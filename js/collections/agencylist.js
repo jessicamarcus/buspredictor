@@ -26,10 +26,6 @@ define(["jquery", "backbone", "models/agency"],
                     });
                 });
                 return parsed;
-            },
-
-            getRoutes: function (agency) {
-//                run createRoutes on agency in collection
             }
     });
 });

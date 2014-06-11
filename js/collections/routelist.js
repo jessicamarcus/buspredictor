@@ -1,14 +1,15 @@
-define(["jquery", "backbone", "models/route", "models/agency"],
-    function ($, Backbone, Route, Agency) {
+define(["jquery", "backbone", "models/route"],
+    function ($, Backbone, Route) {
 
         //collection: RouteList
         return Backbone.Collection.extend({
             model: Route,
-            generatedurl: "http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=" + Agency,
-            url: "data/routelist.xml",
+//            url: "data/routelist.xml",
+            url: function() {
+                return "http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=" + this.agencyTag
+            },
 
             fetch: function (options) {
-                console.log(this.generatedurl);
                 options || (options = {});
                 options.dataType = "xml";
                 Backbone.Collection.prototype.fetch.call(this, options);
