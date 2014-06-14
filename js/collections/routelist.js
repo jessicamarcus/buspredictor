@@ -5,7 +5,7 @@ define(["jquery", "backbone", "models/route"],
         return Backbone.Collection.extend({
             model: Route,
 //            url: "data/routelist.xml",
-            url: function() {
+            url: function () {
                 return "http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=" + this.agencyTag
             },
 
