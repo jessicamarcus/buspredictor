@@ -11,18 +11,18 @@ define(["jquery", "backbone", "handlebars", "underscore", "collections/agencylis
 
         initialize: function () {
             var self = this;
+
             this.$el.change(function () {
                 var agencyTag = $("#agencyList").val();
                 self.selectedAgency = self.collection.findWhere({tag: agencyTag});
 
-                //when user makes selection on this dropdown, request given agency's routes
+                //when user makes selection on this dropdown, request selected agency's routes
                 self.selectedAgency.getRoutes(function () {
-
-                    //and display route dropdown with self.selectedAgency.routes
+                    //display self.selectedAgency.routes
                     if (self.routeListView) {
                         self.routeListView.collection = self.selectedAgency.routes;
-                    }
-                    else {
+                    //or create it if needed
+                    } else {
                         self.routeListView = new RouteListView({collection: self.selectedAgency.routes});
                     }
                     self.routeListView.render();
@@ -38,9 +38,9 @@ define(["jquery", "backbone", "handlebars", "underscore", "collections/agencylis
         itemTemplate: Handlebars.compile(AgencyTemplate),
 
         render: function () {
-            //each item in collection
+            //each agency in collection
             this.collection.each(function (item) {
-                //render the item
+                //render the agency
                 this.$el.append(this.itemTemplate(item.toJSON()));
             }, this);
         }
