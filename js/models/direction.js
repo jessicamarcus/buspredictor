@@ -1,12 +1,9 @@
-define(["jquery", "backbone", "models/stop", "collections/stoplist"],
-    function ($, Backbone, Stop, StopList) {
+define(["jquery", "backbone", "m.stop", "c.stoplist", "c.predictionlist"],
+    function ($, Backbone, Stop, StopList, PredictionList) {
         return Backbone.Model.extend({
-            defaults: {
-                tag: "no tag",
-                title: "no title",
-                name: "no name"
-            },
             stops: new StopList(),
+            predictions: new PredictionList(),
+
             getStops: function () {
                 // check to see if this.stops has any stops in it
                 //      if not, call loadStops
@@ -55,6 +52,20 @@ define(["jquery", "backbone", "models/stop", "collections/stoplist"],
                     // add it to the direction's stops
                     if (currentStop) self.stops.add(currentStop);
                 });
+            },
+            loadPredictions: function (data) {
+                $(data).find("prediction").each(function () {
+                    var prediction = {};
+                });
+
+                this.predictions = new PredictionList({
+                    minutes: data.attr("minutes"),
+                    isScheduleBased: data.attr("isScheduleBased"),
+                    epochTime: data.attr("epochTime"),
+                    //not always present
+                    delayed: data.attr("delayed"),
+                    slowness: data.attr("slowness")
+                })
             }
         })
     }

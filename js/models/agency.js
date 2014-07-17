@@ -1,15 +1,8 @@
-define(["backbone", "collections/routelist"],
+define(["backbone", "c.routelist"],
     function (Backbone, RouteList) {
         //Agency model
         return Backbone.Model.extend({
-            defaults: {
-                tag: "no tag",
-                title: "no title",
-                regionTitle: "no regionTitle",
-                //not always present:
-                shortTitle: ""
-            },
-            getRoutes: function(callback) {
+            getRoutes: function (callback) {
                 if (!this.routes) {
                     //if this agency has not been selected yet, make child collection of routes
                     this.routes = new RouteList();

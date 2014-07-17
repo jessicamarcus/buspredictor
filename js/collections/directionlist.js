@@ -1,4 +1,4 @@
-define(["jquery", "backbone", "models/direction"],
+define(["jquery", "backbone", "m.direction"],
     function ($, Backbone, Direction) {
         return Backbone.Collection.extend({
             model: Direction,
@@ -22,6 +22,17 @@ define(["jquery", "backbone", "models/direction"],
                 });
                 //tidy up collection (alphabetize by in/outbound)
                 self.sort();
+            },
+            getDirections: function (data) {
+                var self = this,
+                    content;
+                $(data).find("direction").each(function () {
+                    content = $(this);
+                    var direction = new Direction({ title: content.attr("title") });
+                    self.add(direction);
+                });
+//                this.predictions = new PredictionList();
+//                this.predictions.getPrediction(data);
             }
         })
     }

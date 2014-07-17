@@ -1,4 +1,4 @@
-define(["jquery", "backbone", "handlebars", "underscore", "collections/agencylist", "views/routelistView", "text!views/templates/agencyTemplate.html"],
+define(["jquery", "backbone", "handlebars", "underscore", "c.agencylist", "v.routelistView", "text!t.agencyTemplate"],
     function ($, Backbone, Handlebars, _, AgencyList, RouteListView, AgencyTemplate) {
 
     return Backbone.View.extend({
@@ -17,16 +17,22 @@ define(["jquery", "backbone", "handlebars", "underscore", "collections/agencylis
                 self.selectedAgency = self.collection.findWhere({tag: agencyTag});
 
                 //when user makes selection on this dropdown, request selected agency's routes
-                self.selectedAgency.getRoutes(function () {
-                    //display self.selectedAgency.routes
-                    if (self.routeListView) {
-                        self.routeListView.collection = self.selectedAgency.routes;
-                    //or create it if needed
-                    } else {
-                        self.routeListView = new RouteListView({collection: self.selectedAgency.routes});
-                    }
-                    self.routeListView.render();
-                });
+                if (self.selectedAgency) {
+
+                    self.selectedAgency.getRoutes(function () {
+                        //display self.selectedAgency.routes
+                        if (self.routeListView) {
+                            self.routeListView.collection = self.selectedAgency.routes;
+                            //or create it if needed
+                        } else {
+                            self.routeListView = new RouteListView({collection: self.selectedAgency.routes});
+                        }
+                        self.routeListView.render();
+                    });
+                    //unless they choose the default "select an agency" option
+                } else {
+                    //$("#dirlist").empty();
+                }
             });
             this.collection = new AgencyList();
             //go get data from server

@@ -1,3 +1,15 @@
 .inactive-ddl {
     visibility: hidden;
 }
+
+#prediction {
+    z-index: 2;
+    position: absolute;
+    top: 20%;
+    width: 30%;
+    height: 40%;
+    right: 10%;
+    padding: 5px;
+    background-color: rgba(75, 75, 75, .5);
+    border: 3px solid #000;
+}

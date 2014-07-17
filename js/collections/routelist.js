@@ -1,4 +1,4 @@
-define(["jquery", "backbone", "models/route"],
+define(["jquery", "backbone", "m.route"],
     function ($, Backbone, Route) {
 
         //collection: RouteList

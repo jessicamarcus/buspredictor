@@ -1,14 +1,10 @@
-define(["backbone", "collections/directionlist", "collections/stoplist"],
+define(["backbone", "c.directionlist", "c.stoplist"],
     function (Backbone, DirectionList, StopList) {
         //Route model
         return Backbone.Model.extend({
             url: function () {
                 return "http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=" + this.collection.agencyTag +
                     "&r=" + this.attributes.tag + "&terse";
-            },
-            defaults: {
-                tag: "no tag",
-                title: "no title"
             },
             directions: new DirectionList(),
             stops: new StopList(),

@@ -1,10 +1,36 @@
 require.config({
     paths: {
-        "jquery": "lib/jquery-1.11.1",
+        "jquery": "lib/jquery-2.1.1",
         "underscore": "lib/underscore",
         "backbone": "lib/backbone",
         "text": "lib/text",
-        "handlebars": "lib/handlebars-v1.3.0"
+        "handlebars": "lib/handlebars-v1.3.0",
+        // my app
+        "m.agency": "js/models/agency",
+        "m.direction": "js/models/direction",
+        "m.prediction": "js/models/prediction",
+        "m.predictions": "js/models/predictions",
+        "m.route": "js/models/route",
+        "m.stop": "js/models/stop",
+
+        "c.agencylist": "js/collections/agencylist",
+        "c.directionlist": "js/collections/directionlist",
+        "c.predictionslist": "js/collections/predictionslist",
+        "c.routelist": "js/collections/routelist",
+        "c.stoplist": "js/collections/stoplist",
+
+        "v.agencylistview": "js/views/agencylistView",
+        "v.directionlistview": "js/views/directionlistView",
+        "v.routelistview": "js/views/routelistView",
+        "v.stoplistview": "js/views/stoplistView",
+
+        "t.agencyTemplate": "js/views/templates/agencyTemplate.html",
+        "t.dirTemplate": "js/views/templates/dirTemplate.html",
+        "t.routeTemplate": "js/views/templates/routeTemplate.html",
+        "t.stopTemplate": "js/views/templates/stopTemplate.html",
+
+        //"data.xml.89davis": "test/data/89davis.xml",
+        "util.utc_handlers": "util/utc_handlers"
     },
     shim: {
         "underscore": { exports: "_" },

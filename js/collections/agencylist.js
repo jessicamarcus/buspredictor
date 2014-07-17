@@ -1,4 +1,4 @@
-define(["jquery", "backbone", "models/agency"],
+define(["jquery", "backbone", "m.agency"],
     function ($, Backbone, Agency) {
 
         //collection: AgencyList
