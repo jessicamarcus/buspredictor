@@ -8,16 +8,17 @@ require.config({
         // my app
         "m.agency": "js/models/agency",
         "m.direction": "js/models/direction",
-        "m.prediction": "js/models/prediction",
         "m.predictions": "js/models/predictions",
         "m.route": "js/models/route",
         "m.stop": "js/models/stop",
+        "m.vehicleprediction": "js/models/vehicleprediction",
 
         "c.agencylist": "js/collections/agencylist",
         "c.directionlist": "js/collections/directionlist",
         "c.predictionslist": "js/collections/predictionslist",
         "c.routelist": "js/collections/routelist",
         "c.stoplist": "js/collections/stoplist",
+        "c.vehiclepredictionlist": "js/collections/vehiclepredictionlist",
 
         "v.agencylistview": "js/views/agencylistView",
         "v.directionlistview": "js/views/directionlistView",
@@ -29,7 +30,6 @@ require.config({
         "t.routeTemplate": "js/views/templates/routeTemplate.html",
         "t.stopTemplate": "js/views/templates/stopTemplate.html",
 
-        //"data.xml.89davis": "test/data/89davis.xml",
         "util.utc_handlers": "util/utc_handlers"
     },
     shim: {

@@ -1,8 +1,7 @@
-define(["jquery", "backbone", "m.stop", "c.stoplist", "c.predictionlist"],
-    function ($, Backbone, Stop, StopList, PredictionList) {
+define(["jquery", "backbone", "m.stop", "c.stoplist", "c.vehiclepredictionlist"],
+    function ($, Backbone, Stop, StopList, VehiclePredictionList) {
         return Backbone.Model.extend({
             stops: new StopList(),
-            predictions: new PredictionList(),
 
             getStops: function () {
                 // check to see if this.stops has any stops in it
@@ -54,18 +53,23 @@ define(["jquery", "backbone", "m.stop", "c.stoplist", "c.predictionlist"],
                 });
             },
             loadPredictions: function (data) {
-                $(data).find("prediction").each(function () {
-                    var prediction = {};
-                });
-
-                this.predictions = new PredictionList({
-                    minutes: data.attr("minutes"),
-                    isScheduleBased: data.attr("isScheduleBased"),
-                    epochTime: data.attr("epochTime"),
-                    //not always present
-                    delayed: data.attr("delayed"),
-                    slowness: data.attr("slowness")
-                })
+//                var parsed = {},
+//                    content = {};
+//                $(data).find("prediction").each(function () {
+//                    content = $(this);
+//                    parsed = {
+//                        agencyTitle: content.attr("agencyTitle"),
+//                        routeTag: content.attr("routeTag"),
+//                        stopTitle: content.attr("stopTitle"),
+//                        stopTag: content.attr("stopTag")
+//                    };
+//                    // have this also load directions, etc.
+//                    // instantiate directionlist and pass in data obj
+//                });
+                this.predictions = new VehiclePredictionList();
+                this.predictions.load(data);
+//
+//                return parsed;
             }
         })
     }

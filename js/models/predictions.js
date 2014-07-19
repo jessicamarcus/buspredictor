@@ -22,7 +22,8 @@ define(["backbone", "jquery", "c.directionlist"],
                     // instantiate directionlist and pass in data obj
                 });
                 this.directions = new DirectionList();
-                this.directions.getDirections(data);
+                this.directions.load(data);
+
                 return parsed;
             }
         });
