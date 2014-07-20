@@ -30,7 +30,7 @@ require.config({
         "t.routeTemplate": "js/views/templates/routeTemplate.html",
         "t.stopTemplate": "js/views/templates/stopTemplate.html",
 
-        "util.utc_handlers": "util/utc_handlers"
+        "utilities": "util/utc_handlers"
     },
     shim: {
         "underscore": { exports: "_" },

@@ -1,8 +1,8 @@
-define(["backbone", "util.utc_handlers"],
-    function (Backbone, utcToLocal12hrTime) {
+define(["backbone", "utilities"],
+    function (Backbone, Utilities) {
         return Backbone.Model.extend({
             initialize: function () {
-               //this.epochTime = utcToLocal12hrTime(this.epochTime);
+                this.attributes.arrivalTime = Utilities.utcToLocal12hrTime(this.attributes.epochTime);
             }
         })
     }

@@ -1,4 +1,4 @@
-define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "c.directionlist", "c.predictionslist", "text!test/data/89davis.xml", "text!test/data/routeconfig.xml"], function (sinon, $, _, Predictions, Direction, DirectionList, PredictionsList, XMLData, XMLRoute) {
+define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "c.directionlist", "c.predictionslist", "utilities", "text!test/data/89davis.xml", "text!test/data/routeconfig.xml"], function (sinon, $, _, Predictions, Direction, DirectionList, PredictionsList, Utilities, XMLData, XMLRoute) {
 //    describe("sinon", function () {
 //        var modelUnderTest, mockServer, testURL;
 //
@@ -95,11 +95,6 @@ define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "c.dire
         });
 
         describe("the DirectionList collection", function () {
-//            xit("determines if it needs to create a Routes collection, or a Predictions collection on the Direction model", function () {
-//                var needRoutes = new DirectionList(XMLRoute);
-//                console.log(JSON.stringify(needRoutes.route));
-//                expect(needRoutes.name).toBeDefined();
-//            });
             it("parses data into child Direction model objects upon its instantiation", function () {
                 var direction1 = modelUnderTest.directions.at(0),
                     direction2 = modelUnderTest.directions.at(1);
@@ -114,7 +109,7 @@ define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "c.dire
                     var direction = modelUnderTest.directions.at(0);
                     expect(direction.predictions.length).toEqual(2);
                 });
-            })
+            });
         });
 
         describe("the VehiclePredictionList collection", function () {
@@ -123,14 +118,24 @@ define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "c.dire
                 expect(predictions.length).toEqual(2);
                 expect(predictions.at(0).attributes.epochTime).toBe("1389204789480");
             });
-            xit("should have a max of three vehicle predictions", function () {});
+            //move functionality to view: xit("should have a max of three vehicle predictions", function () {});
         });
-//
-//        describe("the VehiclePrediction model", function () {
-//            xit("has minutes, epochTime, isScheduleBased", function () {});
-//            xit("will display highlighted if delayed and slowness attributes are present", function () {});
-//            xit("should convert epochTime into local 12hr time for the benefit of the user", function () {});
-//        })
+
+        describe("the VehiclePrediction model", function () {
+
+            it("has minutes, epochTime, isScheduleBased", function () {
+                var prediction = modelUnderTest.directions.at(0).predictions.at(0);
+                expect(prediction.attributes.epochTime).toBe("1389204789480");
+                expect(prediction.attributes.minutes).toBe("12");
+                console.log(JSON.stringify(prediction));
+                expect(prediction.attributes.isDeparture).toBeUndefined();
+            });
+            //move functionality to view: xit("will display highlighted if delayed and slowness attributes are present", function () {});
+            it("should convert epochTime into local 12hr time for the benefit of the user", function () {
+                var prediction = modelUnderTest.directions.at(0).predictions.at(0);
+                expect(prediction.attributes.arrivalTime).toBe("2:13PM");
+            });
+        });
 
     });
 });
