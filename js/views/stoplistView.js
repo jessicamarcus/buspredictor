@@ -1,4 +1,4 @@
-define(["backbone", "handlebars", "text!t.stopTemplate"],
+define(["backbone", "handlebars", "text!views/templates/stopTemplate.html"],
     function (Backbone, Handlebars, StopTemplate) {
 
         return Backbone.View.extend({

@@ -1,4 +1,4 @@
-define(["jquery", "backbone", "handlebars", "v.directionlistView", "v.stoplistView", "text!t.routeTemplate"],
+define(["jquery", "backbone", "handlebars", "v.directionlistview", "v.stoplistview", "text!views/templates/routeTemplate.html"],
     function ($, Backbone, Handlebars, DirListView, StopListView, RouteTemplate) {
 
         return Backbone.View.extend({

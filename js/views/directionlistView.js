@@ -1,4 +1,4 @@
-define(["backbone", "handlebars", "text!t.dirTemplate"],
+define(["backbone", "handlebars", "text!views/templates/dirTemplate.html"],
     function (Backbone, Handlebars, DirTemplate) {
 
         return Backbone.View.extend({

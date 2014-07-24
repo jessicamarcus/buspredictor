@@ -1,4 +1,4 @@
-define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "c.directionlist", "c.predictionslist", "utilities", "text!test/data/89davis.xml", "text!test/data/routeconfig.xml"], function (sinon, $, _, Predictions, Direction, DirectionList, PredictionsList, Utilities, XMLData, XMLRoute) {
+define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "c.directionlist", "c.predictionslist", "c.stoplist", "utilities", "text!test/data/89davis.xml", "text!test/data/agencylist.xml", "text!test/data/routelist.xml", "text!test/data/routeconfig.xml"], function (sinon, $, _, Predictions, Direction, DirectionList, PredictionsList, StopList, Utilities, XMLPrediction, XMLRoute, XMLAgency, XMLRouteList, XMLRouteConfig) {
 //    describe("sinon", function () {
 //        var modelUnderTest, mockServer, testURL;
 //
@@ -41,15 +41,16 @@ define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "c.dire
     describe("requesting, parsing, and displaying a prediction from NextBus", function () {
         var modelUnderTest,
             mockServer,
-            testURL = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=mbta&r=89&s=2729";
+            predictionURL = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=mbta&r=89&s=2729",
+            routeConfigURL = "http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=mbta&r=89",
+            routeListURL = "http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=mbta",
+            agencyListURL = "http://webservices.nextbus.com/service/publicXMLFeed?command=agencyList";
 
         beforeEach(function () {
             mockServer = sinon.fakeServer.create();
 
-            mockServer.respondWith(
-                "GET",
-                testURL,
-                [ 200, {"Content-Type": "application/xml"}, XMLData ]
+            mockServer.respondWith(predictionURL,
+                [ 200, {"Content-Type": "application/xml"}, XMLPrediction ]
             );
 
             modelUnderTest = new Predictions({
@@ -61,6 +62,7 @@ define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "c.dire
             modelUnderTest.fetch({
                 dataType: "xml"
             });
+
             mockServer.respond();
         });
 //        describe("PredictionsList collection", function () {
@@ -82,7 +84,7 @@ define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "c.dire
                 expect(modelUnderTest.attributes.stopTag).toBe("2729");
             });
             it("generates a url from above attributes", function () {
-                expect(modelUnderTest.url()).toBe(testURL);
+                expect(modelUnderTest.url()).toBe(predictionURL);
             });
             it("creates a child DirectionList named 'directions'", function () {
                 expect(modelUnderTest.directions).toBeDefined();
@@ -102,12 +104,16 @@ define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "c.dire
                 expect(direction2.attributes.title).toBe("Clarendon Hill via Broadway");
             });
         });
-//
+
         describe("the Direction model", function () {
-            describe("has a method named loadPredictions", function () {
+            describe("has a load method", function () {
                 it("which creates a child VehiclePredictionList collection", function () {
                     var direction = modelUnderTest.directions.at(0);
                     expect(direction.predictions.length).toEqual(2);
+                });
+                xit("or creates a child stopList collection", function () {
+                    var direction = modelUnderTest.directions.at(0);
+                    expect(direction.stops.length).toBeDefined();
                 });
             });
         });
@@ -118,19 +124,19 @@ define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "c.dire
                 expect(predictions.length).toEqual(2);
                 expect(predictions.at(0).attributes.epochTime).toBe("1389204789480");
             });
-            //move functionality to view: xit("should have a max of three vehicle predictions", function () {});
         });
 
         describe("the VehiclePrediction model", function () {
-
             it("has minutes, epochTime, isScheduleBased", function () {
                 var prediction = modelUnderTest.directions.at(0).predictions.at(0);
                 expect(prediction.attributes.epochTime).toBe("1389204789480");
                 expect(prediction.attributes.minutes).toBe("12");
-                console.log(JSON.stringify(prediction));
-                expect(prediction.attributes.isDeparture).toBeUndefined();
             });
-            //move functionality to view: xit("will display highlighted if delayed and slowness attributes are present", function () {});
+            it("sets a 'delayed' attribute on itself when needed", function () {
+                var prediction = modelUnderTest.directions.at(0).predictions;
+                expect(prediction.at(0).attributes.delayed).toBeUndefined();
+                expect(prediction.at(1).attributes.delayed).toBeDefined();
+            });
             it("should convert epochTime into local 12hr time for the benefit of the user", function () {
                 var prediction = modelUnderTest.directions.at(0).predictions.at(0);
                 expect(prediction.attributes.arrivalTime).toBe("2:13PM");
@@ -138,4 +144,73 @@ define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "c.dire
         });
 
     });
+
+    describe("user selects an agency, a route, a direction, and a stop", function () {
+//        var modelUnderTest,
+//            mockServer,
+//            testURL = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=mbta&r=89&s=2729";
+
+//        beforeEach(function () {
+//            mockServer = sinon.fakeServer.create();
+//
+//            mockServer.respondWith(
+//                "GET",
+//                testURL,
+//                [ 200, {"Content-Type": "application/xml"}, XMLRoute ]
+//            );
+//
+//            modelUnderTest = new DirectionList();
+//
+//            modelUnderTest.fetch({
+//                dataType: "xml"
+//            });
+//
+//            mockServer.respond();
+//        });
+        describe("the DirectionList watches for a tag attribute", function () {
+//            it("includes the xml data as direction.$data", function () {
+//                expect(modelUnderTest.$data).toBeDefined();
+//                console.log(JSON.stringify(modelUnderTest.at(0)));
+//            })
+        })
+    });
+
+    describe("the user experience of selecting a stop/prediction", function () {
+
+        describe("user selects an agency from pulldown", function () {
+            xit("route pulldown becomes visible when an agency is selected", function () {});
+            xit("focus moves to the route pulldown after agency selection", function () {});
+            xit("routelist is reset with new data when user selects a different agency", function () {});
+            xit("routelist pulldown vanishes if no agency has been selected", function () {});
+        });
+
+        describe("user selects a route from pulldown", function () {
+            xit("available directions appear", function () {});
+            xit("directions display updated data if route changes", function () {});
+            xit("directions disappear if agency changes", function () {});
+        });
+
+        describe("user selects a direction", function () {
+            xit("list of available stops appear", function () {});
+            xit("stoplist updated if direction changes", function () {});
+        });
+
+        describe("user selects stop", function () {
+            xit("prediction is displayed", function () {});
+        });
+
+    });
+
+    describe("the predictions collection", function () {
+        xit("contains and displays all user-selected predictions", function () {});
+        xit("should allow user to rearrange predictions via drag+drop", function () {});
+    });
+
+    describe("a route/stop prediction object", function () {
+        xit("is updated every 60 seconds", function () {});
+        xit("should show a warning if a bus is delayed", function () {});
+        xit("should show a max of three predictions per direction", function () {});
+        xit("should have an X to remove itself from predictionslist", function () {});
+    });
+
 });

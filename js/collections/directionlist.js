@@ -3,17 +3,14 @@ define(["jquery", "backbone", "m.direction", "c.vehiclepredictionlist"],
         return Backbone.Collection.extend({
             model: Direction,
             comparator: "name",
+            url:"http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=mbta&r=89&s=2729",
 
             load: function (data) {
                 var self = this,
                     content;
                 $(data).find("direction").each(function () {
                     content = $(this);
-//                    var direction = new Direction({
-//                        tag: content.attr("tag"),
-//                        title: content.attr("title"),
-//                        name: content.attr("name")
-//                    });
+
                     var direction = new Direction({ title: content.attr("title") });
                     if (content.tag) {
                         direction.tag = content.attr("tag");
@@ -30,17 +27,6 @@ define(["jquery", "backbone", "m.direction", "c.vehiclepredictionlist"],
                 });
                 //tidy up collection (alphabetize by in/outbound)
                 self.sort();
-            },
-            getDirections: function (data) {
-                var self = this,
-                    content;
-                $(data).find("direction").each(function () {
-                    content = $(this);
-                    var direction = new Direction({ title: content.attr("title") });
-                    self.add(direction);
-                });
-
             }
-        })
-    }
-);
+        });
+    });

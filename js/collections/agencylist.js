@@ -5,7 +5,7 @@ define(["jquery", "backbone", "m.agency"],
         return Backbone.Collection.extend({
             model: Agency,
             //url: "http://webservices.nextbus.com/service/publicXMLFeed?command=agencyList",
-            url: "data/agencylist.xml",
+            url: "test/data/agencylist.xml",
 
             fetch: function (options) {
                 options || (options = {});

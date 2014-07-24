@@ -1,4 +1,4 @@
-define(["jquery", "backbone", "handlebars", "underscore", "c.agencylist", "v.routelistView", "text!t.agencyTemplate"],
+define(["jquery", "backbone", "handlebars", "underscore", "c.agencylist", "v.routelistview", "text!views/templates/agencyTemplate.html"],
     function ($, Backbone, Handlebars, _, AgencyList, RouteListView, AgencyTemplate) {
 
     return Backbone.View.extend({
