@@ -191,10 +191,11 @@ define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "m.rout
             mockServer;
 
         beforeEach(function () {
+
             mockServer = sinon.fakeServer.create();
 
             mockServer.respondWith(routeConfigURL,
-                [ 200, {"Content-Type": "application/xml"}, XMLRouteConfig ]
+                [200, {"Content-Type": "application/xml"}, XMLRouteConfig]
             );
 
             modelUnderTest = new Route({ tag: "89"});
@@ -203,7 +204,7 @@ define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "m.rout
             routeList.add(modelUnderTest);
             routeList.agencyTag = "mbta";
 
-            mockServer.respond();
+
         });
 
         it("has this.attributes.tag set correctly", function () {
@@ -226,14 +227,16 @@ define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "m.rout
             expect(modelUnderTest.directions).toBeDefined();
         });
         it("fetches correct xml which populates the directionlist", function () {
-            modelUnderTest.fetch({
-                dataType: "xml"
-            });
+
+            modelUnderTest.fetch();
+
             //modelUnderTest.loadConfig();
-            expect(modelUnderTest.directions.route).toBeDefined();
+           mockServer.respond();
+            expect(modelUnderTest.directions.length).toBeGreaterThan(0);
+
             expect(modelUnderTest.routeXml).toBeDefined();
             expect(modelUnderTest.directions.at(0)).toBeDefined();
-            //expect(modelUnderTest.directions.at(0).attributes.title).toBe("Clarendon Hill via Broadway &amp; Davis");
+            expect(modelUnderTest.directions.at(0).attributes.title).toBe("Clarendon Hill via Broadway & Davis");
         });
 
     });

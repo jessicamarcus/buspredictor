@@ -22,7 +22,7 @@ define(["jquery", "backbone", "m.stop", "c.stoplist", "c.vehiclepredictionlist"]
                     if (self.route.stops.length > 0) {
                         currentStop = self.route.stops.findWhere({ tag: stopTag });
                     }
-                    // If the cache has our desired object:    if we have a stop already loaded into this.route.stops (cache)
+
                     if (!currentStop) {
                         // Cache Miss
                         // Your object is in another castle (or not, even)
@@ -48,11 +48,12 @@ define(["jquery", "backbone", "m.stop", "c.stoplist", "c.vehiclepredictionlist"]
                         // add to direction's stops
                     }
                     // Cache Hit - your item has been found in the cache, so do your stuff to it
+                    // if we have a stop already loaded into this.route.stops (cache)
                     // add it to the direction's stops
                     if (currentStop) self.stops.add(currentStop);
                 });
-            },
-            loadPredictions: function (data) {
+            }
+//            loadPredictions: function (data) {
 //                var parsed = {},
 //                    content = {};
 //                $(data).find("prediction").each(function () {
@@ -66,11 +67,11 @@ define(["jquery", "backbone", "m.stop", "c.stoplist", "c.vehiclepredictionlist"]
 //                    // have this also load directions, etc.
 //                    // instantiate directionlist and pass in data obj
 //                });
-                this.predictions = new VehiclePredictionList();
-                this.predictions.load(data);
+//                this.predictions = new VehiclePredictionList();
+//                this.predictions.load(data);
 //
 //                return parsed;
-            }
+//            }
         })
     }
 );

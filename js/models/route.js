@@ -9,37 +9,29 @@ define(["backbone", "c.directionlist", "c.stoplist"],
             directions: new DirectionList(),
             stops: new StopList(),
 
-            //request routeConfig from nextbus; store xml and generate list of route's directions
-//            loadConfig: function () {
-//                var self = this;
-//                self.directions.route = self;
-//                return Backbone.sync("add read", this, { url: this.url(), dataType: "xml", success: function (data) {
-//                    // ensure that routeXml is the route node in routeConfig
-//                    self.routeXml = $(data).find("route").first();
-//                    //clear & update displayed collection
-//                    self.directions.reset(self.directions.load(data));
-//                }});
-//            },
-
-            fetch: function (options) {
-                options || (options = {});
-                options.dataType = "xml";
-                options.success = function (model, data, options) {
-                    // when called for the route from RouteList's parse - data will be just { tag: "blah", title: "blah" }
-                    // when called from the route's own parse - data will be the routeConfig xml
-                    var parsed,
-                        content;
-                    var self = this;
-                    self.routeXml = $(data).find("route").first();
-                    //clear & update displayed collection
-                    self.directions.reset(self.directions.load(data));
-                    content = self.routeXml;
+            parse: function (data) {
+                var parsed = {},
+                    content;
+                if ( data.title ) return data;
+                $(data).find("route").each(function () {
+                    content = $(this);
                     parsed = {
                         tag: content.attr("tag"),
                         title: content.attr("title")
                     };
-
-                    return parsed;
+                });
+                return parsed;
+            },
+            fetch: function (options) {
+                options || (options = {});
+                options.dataType = "xml";
+                options.success = function (model, data, options) {
+                   // when called for the route from RouteList's parse - data will be just { tag: "blah", title: "blah" }
+                    // when called from the route's own parse - data will be the routeConfig xml
+                    model.routeXml = $(data).find("route").first();
+                    //clear old self.directions, load new self.directions
+                    model.directions.reset();
+                    model.directions.load(data);
                 };
                 Backbone.Model.prototype.fetch.call(this, options);
             }
