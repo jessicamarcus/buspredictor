@@ -1,4 +1,4 @@
-define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "m.route", "c.directionlist", "c.predictionslist", "c.stoplist", "c.routelist", "utilities", "text!test/data/89davis.xml", "text!test/data/agencylist.xml", "text!test/data/routelist.xml", "text!test/data/routeconfig.xml"], function (sinon, $, _, Predictions, Direction, Route, DirectionList, PredictionsList, StopList, RouteList, Utilities, XMLPrediction, XMLAgency, XMLRouteList, XMLRouteConfig) {
+define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "m.route", "m.stop", "c.directionlist", "c.predictionslist", "c.stoplist", "c.routelist", "utilities", "text!test/data/89davis.xml", "text!test/data/agencylist.xml", "text!test/data/routelist.xml", "text!test/data/routeconfig.xml"], function (sinon, $, _, Predictions, Direction, Route, Stop, DirectionList, PredictionsList, StopList, RouteList, Utilities, XMLPrediction, XMLAgency, XMLRouteList, XMLRouteConfig) {
 //    describe("sinon", function () {
 //        var modelUnderTest, mockServer, testURL;
 //
@@ -203,8 +203,6 @@ define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "m.rout
             // add the route to a routelist
             routeList.add(modelUnderTest);
             routeList.agencyTag = "mbta";
-
-
         });
 
         it("has this.attributes.tag set correctly", function () {
@@ -220,35 +218,79 @@ define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "m.rout
             expect(modelUnderTest.url()).toBe(routeConfigURL);
         });
 
-        it("modelundertest creates a stoplist when appropriate", function () {
+        it("modelundertest creates a stoplist", function () {
             expect(modelUnderTest.stops).toBeDefined();
         });
-        it("modelundertest creates a directionlist when appropriate", function () {
+        it("modelundertest creates a directionlist", function () {
             expect(modelUnderTest.directions).toBeDefined();
         });
         it("fetches correct xml which populates the directionlist", function () {
 
             modelUnderTest.fetch();
-
-            //modelUnderTest.loadConfig();
-           mockServer.respond();
-            expect(modelUnderTest.directions.length).toBeGreaterThan(0);
+            mockServer.respond();
 
             expect(modelUnderTest.routeXml).toBeDefined();
-            expect(modelUnderTest.directions.at(0)).toBeDefined();
+            expect(modelUnderTest.directions.length).toBeGreaterThan(0);
             expect(modelUnderTest.directions.at(0).attributes.title).toBe("Clarendon Hill via Broadway & Davis");
         });
 
     });
 
-    describe("user selects an agency, a route, a direction, and a stop", function () {
+    describe("Extract and use data from routeConfig", function () {
+        var modelUnderTest, // test route object
+            routeList,
+            mockServer,
+            directionUnderTest; // test direction object
 
-        describe("the DirectionList watches for a tag attribute", function () {
-//            it("includes the xml data as direction.$data", function () {
-//                expect(modelUnderTest.$data).toBeDefined();
-//                console.log(JSON.stringify(modelUnderTest.at(0)));
-//            })
-        })
+        beforeEach(function () {
+
+            mockServer = sinon.fakeServer.create();
+
+            mockServer.respondWith(routeConfigURL,
+                [200, {"Content-Type": "application/xml"}, XMLRouteConfig]
+            );
+
+            modelUnderTest = new Route({ tag: "89"});
+            routeList = new RouteList();
+            // add the route to a routelist
+            routeList.add(modelUnderTest);
+            routeList.agencyTag = "mbta";
+            modelUnderTest.fetch();
+            mockServer.respond();
+
+            directionUnderTest = modelUnderTest.directions.at(1); // Davis Square via Broadway
+        });
+        it("the correct test direction object has been selected", function () {
+            expect(directionUnderTest.attributes.tag).toBe("89_0_var1");
+        });
+        it("builds the stoplist", function () {
+            expect(directionUnderTest.route.stops).toBeDefined();
+            directionUnderTest.loadStops();
+
+            expect(modelUnderTest.stops.length).toBeGreaterThan(0);
+        });
+        it("uses a cached stop if one exists", function () {
+            // how can I put something in the cache before we test
+            // create a new stop, and insert it into stops
+            // to verify that it's the one you put into the cache first, change the name on it!
+            // if you are looking up stop 2874, create a stop with tag 2874, and a name like "MY TEST NAME"
+            // get that stop, and verify it's got your new name on it (and not the correct one)
+            //<stop tag="2874" title="Sullivan Station - Upper Busway" lat="42.3839799" lon="-71.07699" stopId="02874"/>
+            var TEST_TITLE = "MY TEST TITLE",
+                testCachedStop = new Stop({ tag: "2874", title: TEST_TITLE });
+            directionUnderTest.route.stops.add(testCachedStop);
+            directionUnderTest.loadStops();
+
+            expect(modelUnderTest.stops.at(0).attributes.title).toBe(TEST_TITLE);
+        });
+
+        it("add title/lat/lon/stopId to each stop in stoplist", function () {
+            directionUnderTest.loadStops();
+            var testStop = modelUnderTest.stops.at(0);
+            expect(testStop.attributes.title).toBe("Sullivan Station - Upper Busway");
+            expect(testStop.attributes.lat).toBe("42.3839799");
+            expect(testStop.attributes.stopId).toBe("02874");
+        });
     });
 
     describe("the user experience of selecting a stop/prediction", function () {

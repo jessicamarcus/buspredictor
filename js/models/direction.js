@@ -22,13 +22,9 @@ define(["jquery", "backbone", "m.stop", "c.stoplist", "c.vehiclepredictionlist"]
                     if (self.route.stops.length > 0) {
                         currentStop = self.route.stops.findWhere({ tag: stopTag });
                     }
-
                     if (!currentStop) {
                         // Cache Miss
-                        // Your object is in another castle (or not, even)
-                        // GO FIND IT
-                        // And then, add it to the cache for later
-                        // ----------------------------
+                        // find and add it to the cache for later:
                         // find the actual stop node in routeXml
                         var $stopNode = $(self.route.routeXml).children("stop[tag='" + stopTag + "']");
 

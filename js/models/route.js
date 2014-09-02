@@ -6,8 +6,12 @@ define(["backbone", "c.directionlist", "c.stoplist"],
                 return "http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=" + this.collection.agencyTag +
                     "&r=" + this.attributes.tag + "&terse";
             },
-            directions: new DirectionList(),
-            stops: new StopList(),
+            initialize: function () {
+                this.directions = new DirectionList();
+                this.directions.route = this;
+                this.stops = new StopList();
+                this.stops.route = this;
+            },
 
             parse: function (data) {
                 var parsed = {},
@@ -23,6 +27,7 @@ define(["backbone", "c.directionlist", "c.stoplist"],
                 return parsed;
             },
             fetch: function (options) {
+
                 options || (options = {});
                 options.dataType = "xml";
                 options.success = function (model, data, options) {

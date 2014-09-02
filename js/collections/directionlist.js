@@ -2,8 +2,9 @@ define(["jquery", "backbone", "m.direction", "c.vehiclepredictionlist"],
     function ($, Backbone, Direction, VehiclePredictionList) {
         return Backbone.Collection.extend({
             model: Direction,
-            comparator: "name",
+            //comparator: "name",
             url: "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=mbta&r=89&s=2729",
+            //url: "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=" + agencyTag + "&r=" + routeTag + "&s=" + stopTag
 
             load: function (data) {
                 var self = this,
@@ -12,9 +13,10 @@ define(["jquery", "backbone", "m.direction", "c.vehiclepredictionlist"],
                     content = $(this);
 
                     var direction = new Direction({ title: content.attr("title") });
-                    if (content.tag) {
-                        direction.tag = content.attr("tag");
-                        direction.name = content.attr("name");
+                    if (content.attr("tag")) {
+                        direction.attributes.tag = content.attr("tag");
+                        direction.attributes.name = content.attr("name");
+                        // Add a reference to the parent route so we have it for later use.
                         direction.route = self.route;
                         // Set direction.data to refer to the xml node containing the direction.
                         direction.$data = content;
@@ -26,7 +28,7 @@ define(["jquery", "backbone", "m.direction", "c.vehiclepredictionlist"],
                     self.add(direction);
                 });
                 //tidy up collection (alphabetize by in/outbound)
-                self.sort();
+                //self.sort();
             }
         });
     });
