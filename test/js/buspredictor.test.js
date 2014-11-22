@@ -112,7 +112,7 @@ define(["sinon", "jquery", "underscore", "m.predictions", "m.direction", "m.rout
                     var direction = modelUnderTest.directions.at(0);
                     expect(direction.predictions.length).toEqual(2);
                 });
-                xit("or creates a child stopList collection", function () {
+                it("or creates a child stopList collection", function () {
                     var direction = modelUnderTest.directions.at(0);
                     expect(direction.stops.length).toBeDefined();
                 });

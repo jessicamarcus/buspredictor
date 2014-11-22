@@ -14,20 +14,16 @@ define(["jquery", "backbone", "m.stop", "c.stoplist", "c.vehiclepredictionlist"]
                 // get reference stops found in this.data
                 self.$data.find("stop").each(function () {
                     var currentStop,
-                    // for each reference stop in direction...
-                    // get the tag
                         stopTag = $(this).attr("tag");
-                   // Caching techniques
+
                     // Find the data in the cache, first:       get the actual stop for the reference stop
                     if (self.route.stops.length > 0) {
                         currentStop = self.route.stops.findWhere({ tag: stopTag });
                     }
                     if (!currentStop) {
-                        // Cache Miss
-                        // find and add it to the cache for later:
-                        // find the actual stop node in routeXml
-                        var $stopNode = $(self.route.routeXml).children("stop[tag='" + stopTag + "']");
 
+                        // cache miss
+                        var $stopNode = $(self.route.routeXml).children("stop[tag='" + stopTag + "']");
                         // create a stop using the node data that we found in routeXml
                         currentStop = new Stop({
                            // parse the node
@@ -43,7 +39,7 @@ define(["jquery", "backbone", "m.stop", "c.stoplist", "c.vehiclepredictionlist"]
                         self.route.stops.add(currentStop);
                         // add to direction's stops
                     }
-                    // Cache Hit - your item has been found in the cache, so do your stuff to it
+                    // cache hit
                     // if we have a stop already loaded into this.route.stops (cache)
                     // add it to the direction's stops
                     if (currentStop) self.stops.add(currentStop);

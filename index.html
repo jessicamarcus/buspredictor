@@ -8,21 +8,41 @@
 </head>
 <body>
 
-<!--<label for="agencyList">Choose an agency:</label>-->
-<select id="agencyList" autofocus>
-    <option value="">Select an agency:</option>
-</select>
+<div class="chooser">
 
-<!--<div class="inactive-ddl" id="routes-ddl">-->
-    <label for="routeList">Choose a route:</label>
-    <select id="routeList"></select>
-<!--</div>-->
+    <ul class="predictionSelection">
+    <li>
+        <label for="agencyList" class="hidden">Choose an agency:</label>
+        <select class="ddl" id="agencyList" autofocus>
+            <option value="">Select an agency:</option>
+        </select>
+    </li>
 
-<div id="prediction"></div>
+    <li>
+        <label for="routeList" class="hidden">Select a route:</label>
+        <select class="ddl" id="routeList">
+            <option value="">Select a route:</option>
+        </select>
+    </li>
 
-<ul id="dirList"></ul>
+    <li>
+        <label for="dirList" class="hidden">Select a direction:</label>
+        <select class="ddl" id="dirList">
+            <option value="">Select a direction:</option>
+        </select>
+    </li>
 
-<ul id="stopList"></ul>
+    <li>
+        <label for="stopList" class="hidden">Select a stop:</label>
+        <select class="ddl" id="stopList">
+            <option value="">Select a stop:</option>
+        </select>
+    </li>
+    </ul>
+</div>
+
+<div id="prediction" class="bus-prediction"></div>
+
 
 <script data-main="js/app" src="js/lib/require.js"></script>
 

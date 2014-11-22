@@ -1,0 +1,35 @@
+body {
+  background-color: rgba(68, 193, 177, 0.3);
+}
+.hidden {
+  visibility: hidden;
+}
+.delayed {
+  background-color: rgba(255, 0, 0, 0.4);
+}
+
+.chooser {
+  width: 20%;
+  ul {
+    padding: 0;
+    list-style-type: none;
+  }
+  select {
+    min-width: 100%;
+    max-width: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    &:focus {
+      outline-color: rgb(68, 193, 177);
+    }
+  }
+}
+
+.bus-prediction {
+  width: 25%;
+  height: 250px;
+  padding: 5px;
+  margin: auto;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 3px solid #000;
+  border-radius: 2px;
+}

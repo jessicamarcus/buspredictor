@@ -27,7 +27,6 @@ define(["backbone", "c.directionlist", "c.stoplist"],
                 return parsed;
             },
             fetch: function (options) {
-
                 options || (options = {});
                 options.dataType = "xml";
                 options.success = function (model, data, options) {

@@ -7,10 +7,9 @@ define(["backbone", "handlebars", "text!views/templates/stopTemplate.html"],
 
             render: function () {
                 this.$el.empty();
-                //render each direction
+
                 this.collection.each(function (stop) {
                     this.$el.append(this.template(stop.toJSON()));
-
                 }, this);
             }
 

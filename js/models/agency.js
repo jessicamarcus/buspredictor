@@ -8,8 +8,7 @@ define(["backbone", "c.routelist"],
                     this.routes = new RouteList();
                     this.routes.agencyTag = this.attributes.tag.toLowerCase();
                     this.routes.fetch({reset: true, success: callback});
-                }
-                else {
+                } else {
                     //otherwise, use extant obj/collection
                     callback.call(this);
                 }

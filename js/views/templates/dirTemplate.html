@@ -1,5 +1,5 @@
 {{#if name}}
-    <li>{{name}}: <a id="dir{{tag}}" href="#">{{title}}</a></li>
+    <option value='{{title}}'>{{title}}: {{name}}</option>
 {{else}}
-    <li><a id="dir{{tag}}" href="#">{{title}}</a></li>
+    <option value='{{title}}'>{{title}}</option>
 {{/if}}
