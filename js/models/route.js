@@ -7,6 +7,8 @@ define(["backbone", "c.directionlist", "c.stoplist"],
                     "&r=" + this.attributes.tag + "&terse";
             },
             initialize: function () {
+                // the routeConfig cmd returns an xml doc that contains all of the data for both directions and stops
+                // create the empty collections, and then pass a reference to this route to each
                 this.directions = new DirectionList();
                 this.directions.route = this;
                 this.stops = new StopList();
@@ -34,6 +36,7 @@ define(["backbone", "c.directionlist", "c.stoplist"],
                     // when called from the route's own parse - data will be the routeConfig xml
                     model.routeXml = $(data).find("route").first();
                     //clear old self.directions, load new self.directions
+                    // ???: why reset?
                     model.directions.reset();
                     model.directions.load(data);
                 };

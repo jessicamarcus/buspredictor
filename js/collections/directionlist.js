@@ -2,9 +2,6 @@ define(["jquery", "backbone", "m.direction", "c.vehiclepredictionlist"],
     function ($, Backbone, Direction, VehiclePredictionList) {
         return Backbone.Collection.extend({
             model: Direction,
-            //comparator: "name",
-            url: "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=mbta&r=89&s=2729",
-            //url: "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=" + agencyTag + "&r=" + routeTag + "&s=" + stopTag
 
             load: function (data) {
                 var self = this,

@@ -9,29 +9,30 @@ define(["backbone", "handlebars", "v.stoplistview", "text!views/templates/dirTem
                 var self = this;
 
                 this.$el.change(function () {
-                        var dirTitle = $("#dirList").val();
-                        self.selectedDir = self.collection.findWhere({title: dirTitle});
+                    var dirTitle = $("#dirList").val();
+                    self.selectedDir = self.collection.findWhere({title: dirTitle});
 
-                        var stopListView = new StopListView({collection: self.selectedDir.stops});
-                        stopListView.listenTo(self.selectedDir.stops, 'add sync', function () {
-                            stopListView.render();
-                        });
-
-                        self.selectedDir.loadStops();
+                        if (!stopListView) {
+                            var stopListView = new StopListView({collection: self.selectedDir.stops});
+                            stopListView.listenTo(self.selectedDir.stops, 'add', function () {
+                                stopListView.render();
+                            });
+                        }
+                    //self.selectedDir.on('change', stopListView.render, stopListView);
+                    self.selectedDir.getStops();
 
                     }
                 );
             },
-
             render: function () {
                 this.$el.empty();
+                this.$el.append('<option>Select a direction:</option>');
                 //render each direction
                 this.collection.each(function (dir) {
                     this.$el.append(this.template(dir.toJSON()));
-                    // add itembound event
-                    this.trigger("itembound", dir);
                 }, this);
-            }
+            },
+            updateStops: function () {}
 
         })
     }

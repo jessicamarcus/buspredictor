@@ -1,10 +1,10 @@
 require.config({
     paths: {
-        "jquery": "lib/jquery-2.1.1",
-        "underscore": "lib/underscore",
-        "backbone": "lib/backbone",
-        "text": "lib/text",
-        "handlebars": "lib/handlebars-v1.3.0",
+        "jquery": "../bower_components/jquery/dist/jquery",
+        "underscore": "../bower_components/underscore/underscore",
+        "backbone": "../bower_components/backbone/backbone",
+        "text": "../bower_components/text/text",
+        "handlebars": "../bower_components/handlebars/handlebars",
         // my app
         "m.agency": "models/agency",
         "m.direction": "models/direction",

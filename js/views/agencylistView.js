@@ -4,13 +4,15 @@ define(["jquery", "backbone", "handlebars", "underscore", "c.agencylist", "v.rou
     return Backbone.View.extend({
         el: "#agencyList",
 
-        events: {
-//            "click select": $("#routes-ddl").removeClass("inactive-ddl")
-//            "change #agencyList": this.requestRoutes
-        },
-
         initialize: function () {
             var self = this;
+
+            this.collection = new AgencyList();
+            //go get data from server
+            this.collection.fetch({reset: true});
+            this.render();
+
+            this.listenTo(this.collection, "reset", this.render);
 
             this.$el.change(function () {
                 var agencyTag = $("#agencyList").val();
@@ -34,11 +36,6 @@ define(["jquery", "backbone", "handlebars", "underscore", "c.agencylist", "v.rou
                     //$("#dirlist").empty();
                 }
             });
-            this.collection = new AgencyList();
-            //go get data from server
-            this.collection.fetch({reset: true});
-            this.render();
-            this.listenTo(this.collection, "reset", this.render);
         },
 
         itemTemplate: Handlebars.compile(AgencyTemplate),

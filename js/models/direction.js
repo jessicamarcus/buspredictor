@@ -1,12 +1,12 @@
-define(["jquery", "backbone", "m.stop", "c.stoplist", "c.vehiclepredictionlist"],
-    function ($, Backbone, Stop, StopList, VehiclePredictionList) {
+define(["jquery", "backbone", "m.stop", "c.stoplist"],
+    function ($, Backbone, Stop, StopList) {
         return Backbone.Model.extend({
             stops: new StopList(),
 
             getStops: function () {
-                // check to see if this.stops has any stops in it
-                //      if not, call loadStops
-                // otherwise return this.stops
+                // clear out collection if one exists
+                if (this.stops.length) this.stops.reset();
+                this.loadStops();
             },
             loadStops: function () {
                 var self = this;
@@ -16,7 +16,7 @@ define(["jquery", "backbone", "m.stop", "c.stoplist", "c.vehiclepredictionlist"]
                     var currentStop,
                         stopTag = $(this).attr("tag");
 
-                    // Find the data in the cache, first:       get the actual stop for the reference stop
+                    // Find the data in the cache, first: get the actual stop for the reference stop
                     if (self.route.stops.length > 0) {
                         currentStop = self.route.stops.findWhere({ tag: stopTag });
                     }

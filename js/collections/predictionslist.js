@@ -9,8 +9,6 @@ define(["jquery", "backbone", "m.predictions"],
                 return "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=" +
                     this.agencyTag + "&r=" + this.routeTag + "&s=" + this.stopTag
             },
-
-            // todo: research way to set a default options.dataType = "xml", so fetch does not need to be overridden
             fetch: function (options) {
                 options || (options = {});
                 options.dataType = "xml";

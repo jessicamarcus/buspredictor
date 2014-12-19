@@ -17,6 +17,9 @@ define(["jquery", "backbone", "m.vehicleprediction"],
                     });
                     self.add(prediction);
                 });
+            },
+            setAlert: function () {
+                //todo: set alarm / alert on one of the vehiclepredictions
             }
         });
     });

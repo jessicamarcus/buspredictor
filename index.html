@@ -12,30 +12,27 @@
 
     <ul class="predictionSelection">
     <li>
-        <label for="agencyList" class="hidden">Choose an agency:</label>
+        <label for="agencyList">Choose an agency: => ajax call ?command=routeList</label>
         <select class="ddl" id="agencyList" autofocus>
             <option value="">Select an agency:</option>
         </select>
     </li>
 
     <li>
-        <label for="routeList" class="hidden">Select a route:</label>
+        <label for="routeList">Select a route: => ajax call ?command=routeConfig</label>
         <select class="ddl" id="routeList">
-            <option value="">Select a route:</option>
         </select>
     </li>
 
     <li>
-        <label for="dirList" class="hidden">Select a direction:</label>
+        <label for="dirList">Select a direction:</label>
         <select class="ddl" id="dirList">
-            <option value="">Select a direction:</option>
         </select>
     </li>
 
     <li>
-        <label for="stopList" class="hidden">Select a stop:</label>
+        <label for="stopList">Select a stop: => ajax call ?command=prediction</label>
         <select class="ddl" id="stopList">
-            <option value="">Select a stop:</option>
         </select>
     </li>
     </ul>
@@ -44,7 +41,7 @@
 <div id="prediction" class="bus-prediction"></div>
 
 
-<script data-main="js/app" src="js/lib/require.js"></script>
+<script data-main="js/app" src="bower_components/requirejs/require.js"></script>
 
 </body>
 </html>
