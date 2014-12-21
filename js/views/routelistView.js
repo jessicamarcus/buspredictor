@@ -6,8 +6,33 @@ define(["jquery", "backbone", "handlebars", "v.directionlistview", "text!views/t
             itemTemplate: Handlebars.compile(RouteTemplate),
 
             initialize: function () {
+                var self = this;
+                this.$el.removeClass('hidden');
 
-                this.$el.change(this.changeDdl);
+                function loadDirections() {
+                    var routeTag = $("#routeList").val();
+                    self.selectedRoute = self.collection.findWhere({tag: routeTag});
+
+                    if (!self.dirListView) {
+                        self.dirListView = new DirListView({collection: self.selectedRoute.directions});
+                        self.selectedRoute.fetch();
+                        self.dirListView.parent = self;
+
+                        self.dirListView.listenTo(self.selectedRoute.directions, 'add', self.dirListView.render);
+
+                        // Listen to the 'render' event on the routelistview
+                        self.dirListView.listenTo(self, 'render', function () {
+                            // We have re-rendered the routeListView, so erase the dirListView because when we re-render there is no selected route
+                            self.dirListView.collection.reset();
+                            self.dirListView.render();
+                        });
+                    } else {
+                        self.dirListView.collection = self.selectedRoute.directions;
+                        self.dirListView.listenTo(self.selectedRoute.directions, 'add', self.dirListView.render);
+                        self.selectedRoute.fetch();
+                    }
+                }
+                this.$el.change(loadDirections);
             },
 
             render: function () {
@@ -15,29 +40,11 @@ define(["jquery", "backbone", "handlebars", "v.directionlistview", "text!views/t
                 this.$el.empty();
                 this.$el.append('<option>Select a route:</option>');
                 this.collection.each(function (item) {
-                    //render the routes
+                    // render the routes
                     this.$el.append(this.itemTemplate(item.toJSON()));
                 }, this);
-            },
 
-            changeDdl: function () {
-
-                var routeTag = $("#routeList").val();
-                //var routeTag = $(this).val();
-                this.selectedRoute = this.collection.findWhere({tag: routeTag});
-
-                if (this.dirListView) {
-                    this.dirListView.collection = this.selectedRoute.directions;
-                    //or create it if needed
-                } else {
-                    self.dirListView = new DirListView({collection: this.selectedRoute.directions});
-                }
-                this.dirListView.render();
-
-                this.dirListView.listenTo(this.selectedRoute.directions, 'add sync', this.dirListView.render);
-
-                this.selectedRoute.fetch();
+                this.trigger('render');
             }
         });
-
     });

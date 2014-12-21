@@ -7,16 +7,17 @@ define(["backbone", "handlebars", "text!views/templates/stopTemplate.html"],
 
             render: function () {
                 this.$el.empty();
-                this.$el.append('<option>Select a stop:</option>');
 
-                this.collection.each(function (stop) {
-                    this.$el.append(this.template(stop.toJSON()));
-                }, this);
-                console.log(this.collection.length);
+                if (this.collection.length) {
+                    this.$el.removeClass('hidden');
+                    this.$el.append('<option>Select a stop:</option>');
 
-            },
-            clear: function () {
-                this.$el.empty();
+                    this.collection.each(function (stop) {
+                        this.$el.append(this.template(stop.toJSON()));
+                    }, this);
+                } else {
+                    this.$el.addClass('hidden');
+                }
             }
 
         });

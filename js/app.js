@@ -25,6 +25,7 @@ require.config({
         "v.routelistview": "views/routelistView",
         "v.stoplistview": "views/stoplistView",
 
+        "stateTracker": "util/StateTracker",
         "utilities": "util/utc_handlers"
     },
     shim: {
@@ -45,7 +46,6 @@ require(["jquery", "views/agencylistView"], function ($, AgencyListView) {
 //            { tag: "test2", title: "Second Agency", regionTitle: "Region"},
 //            { tag: "test3", title: "Third Agency", regionTitle: "Region"}
 //        ];
-
         var view = new AgencyListView();
     });
 

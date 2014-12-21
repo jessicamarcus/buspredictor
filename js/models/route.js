@@ -37,7 +37,7 @@ define(["backbone", "c.directionlist", "c.stoplist"],
                     model.routeXml = $(data).find("route").first();
                     //clear old self.directions, load new self.directions
                     // ???: why reset?
-                    model.directions.reset();
+                    //model.directions.reset();
                     model.directions.load(data);
                 };
                 Backbone.Model.prototype.fetch.call(this, options);
