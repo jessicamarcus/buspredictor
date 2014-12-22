@@ -10,8 +10,8 @@ define(["backbone", "handlebars", "v.stoplistview", "text!views/templates/dirTem
 
 
                 function loadStops() {
-                    var dirTitle = $("#dirList").val();
-                    self.selectedDir = self.collection.findWhere({title: dirTitle});
+                    var dirTag = $("#dirList").val();
+                    self.selectedDir = self.collection.findWhere({tag: dirTag});
 
                     if (!self.stopListView) {
                         self.stopListView = new StopListView({collection: self.selectedDir.stops});
@@ -21,11 +21,9 @@ define(["backbone", "handlebars", "v.stoplistview", "text!views/templates/dirTem
                         });
                         self.stopListView.listenTo(self, 'render', function () {
                             self.stopListView.collection.reset();
-                            //self.stopListView.collection = null;
                             self.stopListView.render();
                         });
                     }
-                    //self.selectedDir.on('change', stopListView.render);
                     self.selectedDir.getStops();
                 }
                 this.$el.change(loadStops);

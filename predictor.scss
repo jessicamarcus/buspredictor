@@ -9,7 +9,13 @@ body, html {
 }
 
 body {
-  background-image: url('trianglify-background.svg');
+  background: {
+    image: url('trianglify-background.svg');
+    size: cover;
+    attachment: fixed;
+    position: top center;
+    repeat: no-repeat;
+  }
   font-size: 100%;
   margin: 0;
   padding: 1rem;
