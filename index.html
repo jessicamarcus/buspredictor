@@ -6,40 +6,36 @@
     <title>bus predictor</title>
     <link type="text/css" rel="stylesheet" href="predictor.css" />
 </head>
+
 <body>
 
 <div class="chooser">
 
     <ul class="predictionSelection">
-    <li>
-        <label for="agencyList" class="hidden">Choose an agency:</label>
-        <select class="ddl" id="agencyList" autofocus>
-            <option value="">Select an agency:</option>
-        </select>
-    </li>
+        <li class="ddl">
+            <select id="agencyList">
+                <option value="">Select an agency:</option>
+            </select>
+        </li>
 
-    <li>
-        <label for="routeList" class="hidden">Select a route:</label>
-        <select class="ddl hidden" id="routeList">
-        </select>
-    </li>
+        <li class="ddl hidden">
+            <select id="routeList">
+            </select>
+        </li>
 
-    <li>
-        <label for="dirList" class="hidden">Select a direction:</label>
-        <select class="ddl hidden" id="dirList">
-        </select>
-    </li>
+        <li class="ddl hidden">
+            <select id="dirList">
+            </select>
+        </li>
 
-    <li>
-        <label for="stopList" class="hidden">Select a stop:</label>
-        <select class="ddl hidden" id="stopList">
-        </select>
-    </li>
+        <li class="ddl hidden">
+            <select id="stopList">
+            </select>
+        </li>
     </ul>
 </div>
 
-<div id="prediction" class="bus-prediction"></div>
-
+<div id="busPredictions"></div>
 
 <script data-main="js/app" src="bower_components/requirejs/require.js"></script>
 

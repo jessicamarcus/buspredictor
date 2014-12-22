@@ -1,32 +1,71 @@
+@import url(http://fonts.googleapis.com/css?family=Cantarell:400,700);
+* {
+  box-sizing: border-box; }
+
+body, html {
+  height: 100%;
+  width: 100%; }
+
 body {
-  background-color: rgba(0, 158, 185, 0.4); }
+  background-image: url("trianglify-background.svg");
+  font-size: 100%;
+  margin: 0;
+  padding: 1rem; }
 
 .hidden {
-  visibility: hidden; }
+  display: none; }
 
 .delayed {
   background-color: rgba(255, 0, 0, 0.4); }
 
 .chooser {
-  width: 30%; }
+  margin: 0;
+  width: 100%; }
   .chooser ul {
+    margin: 0;
     padding: 0;
     list-style-type: none; }
-  .chooser select {
+
+.ddl {
+  padding: 0;
+  margin-bottom: 1rem; }
+  .ddl select {
     min-width: 100%;
     max-width: 100%;
-    background-color: rgba(0, 0, 0, 0.1); }
-    .chooser select:focus {
-      outline-color: #009eb9; }
+    background-image: url(arrow483.png);
+    background-color: rgba(0, 0, 0, 0.25);
+    background-repeat: no-repeat;
+    background-position: 98%, right;
+    padding: 5px 32px 5px 5px;
+    cursor: pointer;
+    font-family: 'Cantarell', sans-serif;
+    font-size: .9rem;
+    font-weight: 700;
+    line-height: 1.5;
+    border-radius: 0;
+    -webkit-appearance: none; }
+    .ddl select:focus {
+      outline-style: none; }
 
+@media (min-width: 768px) {
+  .chooser {
+    width: 50%; }
+
+  .ddl select {
+    font-size: 1rem; } }
 .bus-prediction {
-  visibility: hidden;
-  width: 25%;
-  height: 250px;
+  width: 100%;
+  margin: 0;
   padding: 5px;
-  margin: auto;
-  background-color: rgba(0, 0, 0, 0.1);
-  border: 3px solid #000;
-  border-radius: 2px; }
+  background-color: rgba(0, 0, 0, 0.25);
+  font-family: 'Cantarell', sans-serif;
+  font-size: .9rem;
+  font-weight: 700; }
+
+@media (min-width: 768px) {
+  .bus-prediction {
+    width: 50%;
+    margin: auto;
+    font-size: 1rem; } }
 
 /*# sourceMappingURL=predictor.css.map */

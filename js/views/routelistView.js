@@ -7,7 +7,7 @@ define(["jquery", "backbone", "handlebars", "v.directionlistview", "text!views/t
 
             initialize: function () {
                 var self = this;
-                this.$el.removeClass('hidden');
+                this.$el.closest('li').removeClass('hidden');
 
                 function loadDirections() {
                     var routeTag = $("#routeList").val();

@@ -1,0 +1,17 @@
+{
+  "name": "buspredictor",
+  "version": "0.0.1",
+  "homepage": "https://github.com/jessicamarcus/buspredictor",
+  "authors": [
+    "Jessica Marcus <jessica.marcus@gmail.com>"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "underscore": "~1.7.0",
+    "backbone": "~1.1.2",
+    "text": "~2.0.12",
+    "handlebars": "~2.0.0",
+    "requirejs": "2.1.15"
+  }
+}

@@ -35,7 +35,7 @@ define(["backbone", "handlebars", "v.stoplistview", "text!views/templates/dirTem
                 this.$el.empty();
 
                 if (this.collection.length) {
-                    this.$el.removeClass('hidden');
+                    this.$el.closest('li').removeClass('hidden');
                     this.$el.append('<option>Select a direction:</option>');
 
                     //render each direction
@@ -43,7 +43,7 @@ define(["backbone", "handlebars", "v.stoplistview", "text!views/templates/dirTem
                         this.$el.append(this.template(dir.toJSON()));
                     }, this);
                 } else {
-                    this.$el.addClass('hidden');
+                    this.$el.closest('li').addClass('hidden');
                 }
                 this.trigger('render');
             }
