@@ -28,7 +28,6 @@ define(["jquery", "backbone", "handlebars", "underscore", "c.agencylist", "v.rou
                         //or create it if needed
                     } else {
                         self.routeListView = new RouteListView({collection: self.selectedAgency.routes});
-                        //self.routeListView.parent = self;
                     }
                     self.routeListView.render();
                 });

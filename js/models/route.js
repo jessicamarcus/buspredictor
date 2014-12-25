@@ -13,6 +13,7 @@ define(["backbone", "c.directionlist", "c.stoplist"],
                 this.directions.route = this;
                 this.stops = new StopList();
                 this.stops.route = this;
+                this.agencyTag = this.collection.agencyTag;
             },
 
             parse: function (data) {

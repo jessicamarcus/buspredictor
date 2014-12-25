@@ -5,6 +5,21 @@ define(["backbone", "handlebars", "text!views/templates/stopTemplate.html"],
             el: "#stopList",
             template: Handlebars.compile(StopTemplate),
 
+            initialize: function () {
+                var self = this;
+
+                function requestPrediction() {
+                    var selectedStop,
+                        stopTag = $('#stopList').val();
+
+                    self.selectedStop = self.collection.findWhere({tag: stopTag});
+                   // console.log(self.selectedStop.attributes.tag);
+                    self.selectedStop.getPrediction();
+               }
+            // change this to be triggered by a button instead of onchange
+                this.$el.change(requestPrediction);
+            },
+
             render: function () {
                 this.$el.empty();
 
@@ -19,7 +34,6 @@ define(["backbone", "handlebars", "text!views/templates/stopTemplate.html"],
                     this.$el.closest('li').addClass('hidden');
                 }
             }
-
         });
     }
 );

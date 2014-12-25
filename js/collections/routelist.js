@@ -1,7 +1,5 @@
 define(["jquery", "backbone", "m.route"],
     function ($, Backbone, Route) {
-
-        //collection: RouteList
         return Backbone.Collection.extend({
             model: Route,
 

@@ -8,7 +8,6 @@ define(["backbone", "handlebars", "v.stoplistview", "text!views/templates/dirTem
             initialize: function () {
                 var self = this;
 
-
                 function loadStops() {
                     var dirTag = $("#dirList").val();
                     self.selectedDir = self.collection.findWhere({tag: dirTag});

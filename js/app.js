@@ -24,9 +24,9 @@ require.config({
         "v.directionlistview": "views/directionlistView",
         "v.routelistview": "views/routelistView",
         "v.stoplistview": "views/stoplistView",
-
-        "stateTracker": "util/StateTracker",
-        "utilities": "util/utc_handlers"
+        "v.predictionslistview": "views/predictionslistView",
+        "utilities": "util/utc_handlers",
+        "pageview": "pageView"
     },
     shim: {
         "underscore": { exports: "_" },
@@ -38,15 +38,15 @@ require.config({
     }
 });
 
-require(["jquery", "views/agencylistView"], function ($, AgencyListView) {
-
+//require(["jquery", "views/agencylistView", "views/predictionslistView", "pageView"], function ($, AgencyListView, PredictionsListView, PageView) {
+require(["jquery", "pageView"], function ($, PageView) {
     $(function () {
-//        var agencyList = [
-//            { tag: "test1", title: "First Agency", regionTitle: "Region"},
-//            { tag: "test2", title: "Second Agency", regionTitle: "Region"},
-//            { tag: "test3", title: "Third Agency", regionTitle: "Region"}
-//        ];
-        var view = new AgencyListView();
-    });
 
+        var PageView = PageView;
+//        var pageView = {};
+//
+//        pageView.agencyListView = new AgencyListView();
+//        pageView.predictionsListView = new PredictionsListView();
+//
+    });
 });

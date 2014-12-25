@@ -1,6 +1,7 @@
 define(["jquery", "backbone", "m.direction", "c.vehiclepredictionlist"],
     function ($, Backbone, Direction, VehiclePredictionList) {
         return Backbone.Collection.extend({
+            // this collection/obj is dual-purpose: utilized with the series of dropdowns, and then again for a prediction.
             model: Direction,
 
             load: function (data) {
@@ -15,6 +16,8 @@ define(["jquery", "backbone", "m.direction", "c.vehiclepredictionlist"],
                         direction.attributes.name = content.attr("name");
                         // Add a reference to the parent route so we have it for later use.
                         direction.route = self.route;
+                        direction.agencyTag = self.route.agencyTag;
+                        direction.routeTag = self.route.attributes.tag;
                         // Set direction.data to refer to the xml node containing the direction.
                         direction.$data = content;
                     } else {
