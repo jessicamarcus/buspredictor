@@ -20,6 +20,11 @@ body {
   margin: 0;
   padding: 1rem;
 }
+a {
+  text-decoration: none;
+  color: #000;
+  //transition: all .5s ease-in-out;
+}
 
 .hidden {
   display: none;
@@ -38,9 +43,43 @@ body {
   }
 }
 
+/* Icon made by Scott de Jonge (http://www.scottdejonge.com) from http://www.flaticon.com */
+.ddl.go {
+  background: {
+    image: url(frontal4.png);
+    color: rgba(255, 135, 68, .5);
+    repeat: no-repeat;
+    position: 98%, right;
+  }
+  border: 1px solid transparent;
+  text-align: center;
+  transition: all .5s ease-in-out;
+
+  &:hover {
+    background-color: rgba(255, 135, 68, .35);
+    transition: all .5s ease-in-out;
+  }
+}
+.go {
+  padding: 5px 32px 5px 5px;
+  cursor: pointer;
+  font: {
+    family: 'Cantarell', sans-serif;
+    size: .9rem;
+    weight: 700;
+  }
+  line-height: 1.5;
+  border-radius: 0;
+  -webkit-appearance: none;
+  &:focus {
+    outline: {
+      style: none;
+    }
+  }
+}
 .ddl {
-  padding: 0;
   margin-bottom: 1rem;
+
   select {
     min-width: 100%;
     max-width: 100%;
@@ -50,30 +89,17 @@ body {
       repeat: no-repeat;
       position: 98%, right;
     }
-    padding: 5px 32px 5px 5px;
-    cursor: pointer;
-    font: {
-      family: 'Cantarell', sans-serif;
-      size: .9rem;
-      weight: 700;
-    }
-    line-height: 1.5;
-    border-radius: 0;
-    -webkit-appearance: none;
-    &:focus {
-      outline: {
-        style: none;
-      }
-    }
+    @extend .go;
   }
 }
 @media (min-width: 768px) {
   .chooser {
     width: 50%;
   }
-  .ddl select {
+  .go, .ddl select {
     font-size: 1rem;
   }
+
 }
 
 .bus-prediction {
