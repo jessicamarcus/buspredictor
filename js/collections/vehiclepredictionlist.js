@@ -16,8 +16,8 @@ define(["jquery", "backbone", "m.vehicleprediction"],
                         delayed: content.attr("delayed"),
                         slowness: content.attr("slowness")
                     });
-                    return parsed;
                 });
+                this.reset(parsed);
             },
 
             setAlert: function () {

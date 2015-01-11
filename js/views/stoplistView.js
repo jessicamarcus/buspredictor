@@ -1,6 +1,5 @@
-define(["backbone", "handlebars", "text!views/templates/stopTemplate.html"],
-    function (Backbone, Handlebars, StopTemplate) {
-
+define(["backbone", "handlebars", "pagecontroller", "text!views/templates/stopTemplate.html"],
+    function (Backbone, Handlebars, PageController, StopTemplate) {
         return Backbone.View.extend({
             el: "#stopList",
             template: Handlebars.compile(StopTemplate),
@@ -8,21 +7,24 @@ define(["backbone", "handlebars", "text!views/templates/stopTemplate.html"],
             initialize: function () {
                 var self = this;
 
-                function requestPrediction(e) {
-                    e.preventDefault();
+                this.$el.change(function () {
+                    $('.go').removeClass('hidden');
+                });
+
+                $('.go').on('click', function (e) {
                     var selectedStop,
                         stopTag = $('#stopList').val();
 
-                    self.selectedStop = self.collection.findWhere({tag: stopTag});
-                    console.log(self.selectedStop.attributes.tag);
-                    //self.selectedStop.getPrediction();
-                }
-                function showButton() {
-                    $('.go').removeClass('hidden');
-                }
-                this.$el.change(showButton);
-                $('.go').on('click', requestPrediction);
-                //this.$el.change(requestPrediction);
+                    e.preventDefault();
+
+                    selectedStop = self.collection.findWhere({tag: stopTag});
+
+                    // Raise a 'stopSelected' event on the AgencyListView
+                    // This is UGLY but has to be done since these cascading views leave the top-level view
+                    // with no knowledge of sub-views, and we need to listen to this event from whatever creates the AgencyListView
+                    // self.dirlistview.routelistview.agencylistview.trigger...
+                    self.parent.parent.parent.trigger('stopSelected', selectedStop);
+                });
             },
 
             render: function () {

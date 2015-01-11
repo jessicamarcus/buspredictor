@@ -21,8 +21,8 @@ define(["jquery", "backbone", "m.direction", "c.vehiclepredictionlist"],
                         // Set direction.data to refer to the xml node containing the direction.
                         direction.$data = content;
                     } else {
-                        direction.predictions = new VehiclePredictionList();
-                        direction.predictions.load(content);
+                        direction.vehiclePredictions = new VehiclePredictionList();
+                        direction.vehiclePredictions.load(content);
                     }
                     //and add each direction to collection
                     self.add(direction);

@@ -1,22 +1,24 @@
-define(["backbone", "jquery", "c.directionlist", "utilities"],
-    function (Backbone, $, DirectionList, Utilities) {
+define(["backbone", "jquery", "c.directionlist"],
+    function (Backbone, $, DirectionList) {
         return Backbone.Model.extend({
-            // this model represents the answer from the server when requesting a prediction
+            // this model accepts the server response from requesting a prediction
+            // i.e. it can be considered a route/stop prediction
             // it contains at least one [direction] node, each of which contains [prediction] nodes (i.e. vehicleprediction)
 
             url: function () {
                 return "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=" +
-                    this.agencyTag + "&r=" + this.routeTag + "&s=" + this.stopTag
+                    this.attributes.agencyTag + "&r=" + this.attributes.routeTag + "&s=" + this.attributes.stopTag
             },
             fetch: function (options) {
                 options || (options = {});
                 options.dataType = "xml";
-                Backbone.Collection.prototype.fetch.call(this, options);
+                Backbone.Model.prototype.fetch.call(this, options);
             },
 
             parse: function (data) {
                 var parsed = [],
-                    content;
+                    content,
+                    directions = new DirectionList();
                 $(data).find("predictions").each(function () {
                     content = $(this);
                     parsed.push({
@@ -24,29 +26,14 @@ define(["backbone", "jquery", "c.directionlist", "utilities"],
                         routeTag: content.attr("routeTag"),
                         stopTitle: content.attr("stopTitle"),
                         stopTag: content.attr("stopTag"),
-                        direction: []
+                        directions: directions
                     });
-                    $(data).find("direction").each(function () {
-                        parsed.direction.push({
-                            title: content.attr("title"),
-                            prediction: []
-                        });
-                        $(data).find("prediction").each(function () {
-                            parsed.direction.prediction.push({
-                                arrivalTime: Utilities.utcToLocal12hrTime(content.attr("epochTime")),
-                                minutes: content.attr("minutes"),
-                                isDeparture: content.attr("isDeparture"),
-                                // not always present
-                                delayed: content.attr("delayed"),
-                                slowness: content.attr("slowness")
-                            });
-                        });
-                    });
+                    directions.load(content);
                 });
                 return parsed;
-            },
-            refresh: function () {
-                // every x seconds, call fetch on self
+            //},
+            //refresh: function () {
+            //    // every x seconds, call fetch on self
             }
         });
     }

@@ -1,15 +1,12 @@
-define(["backbone", 'c.predictionslist'],
-    function (Backbone, PredictionsList) {
+define(["backbone"],
+    function (Backbone) {
         return Backbone.Model.extend({
-
-            getPrediction: function () {
-                var properties = {
+            getPredictionParameters: function () {
+                return {
                     agencyTag: this.attributes.agencyTag,
                     routeTag: this.attributes.routeTag,
                     stopTag: this.attributes.tag
                     };
-                console.log(properties);
-                //this.predictionsList.addPrediction(properties);
             }
         })
     }

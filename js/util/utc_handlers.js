@@ -22,7 +22,7 @@ define(function () {
 
         return hours + ":" + minutes + timeOfDay;
     }
-    return { utcToLocal12hrTime: utcToLocal12hrTime }
+    return { utcToLocal12hrTime: utcToLocal12hrTime };
 });
 
 // unit tests

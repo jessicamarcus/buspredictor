@@ -7,7 +7,7 @@ body, html {
   width: 100%; }
 
 body {
-  background-image: url("trianglify-background.svg");
+  background-image: url(assets/trianglify-background.svg);
   background-size: cover;
   background-attachment: fixed;
   background-position: top center;
@@ -34,13 +34,16 @@ a {
     padding: 0;
     list-style-type: none; }
 
+@media (min-width: 768px) {
+  .chooser {
+    width: 50%; } }
 /* Icon made by Scott de Jonge (http://www.scottdejonge.com) from http://www.flaticon.com */
 .ddl.go, .ddl select.ddl {
-  background-image: url(frontal4.png);
+  background-image: url(assets/frontal4.png);
   background-color: rgba(255, 135, 68, 0.5);
   background-repeat: no-repeat;
   background-position: 98%, right;
-  border: 1px solid transparent;
+  border: 1px solid #ffa877;
   text-align: center;
   transition: all .5s ease-in-out; }
   .ddl.go:hover, .ddl select.ddl:hover {
@@ -64,21 +67,18 @@ a {
   .ddl select {
     min-width: 100%;
     max-width: 100%;
-    background-image: url(arrow483.png);
+    background-image: url(assets/arrow483.png);
     background-color: rgba(0, 0, 0, 0.25);
     background-repeat: no-repeat;
     background-position: 98%, right; }
 
 @media (min-width: 768px) {
-  .chooser {
-    width: 50%; }
-
   .go, .ddl select, .ddl select {
     font-size: 1rem; } }
 .bus-prediction {
   width: 100%;
   margin: 0;
-  padding: 5px;
+  padding: 1rem;
   background-color: rgba(0, 0, 0, 0.25);
   font-family: 'Cantarell', sans-serif;
   font-size: .9rem;
@@ -89,5 +89,12 @@ a {
     width: 50%;
     margin: auto;
     font-size: 1rem; } }
+.route-prediction {
+  border: 2px solid #000;
+  background-color: rgba(255, 108, 192, 0.5); }
+
+@media (min-width: 768px) {
+  .route-prediction {
+    width: 50%; } }
 
 /*# sourceMappingURL=predictor.css.map */

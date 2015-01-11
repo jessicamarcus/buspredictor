@@ -25,8 +25,9 @@ require.config({
         "v.routelistview": "views/routelistView",
         "v.stoplistview": "views/stoplistView",
         "v.predictionslistview": "views/predictionslistView",
-        "utilities": "util/utc_handlers",
-        "pageview": "pageView"
+        "v.predictionsview": "views/predictionsView",
+        "utc": "util/utc_handlers",
+        "pagecontroller": "controllers/pageController"
     },
     shim: {
         "underscore": { exports: "_" },
@@ -37,16 +38,9 @@ require.config({
         "handlebars": { exports: "Handlebars" }
     }
 });
-
-//require(["jquery", "views/agencylistView", "views/predictionslistView", "pageView"], function ($, AgencyListView, PredictionsListView, PageView) {
-require(["jquery", "pageView"], function ($, PageView) {
+define(['jquery', 'pagecontroller'],
+    function ($, PageController) {
     $(function () {
-
-        var PageView = PageView;
-//        var pageView = {};
-//
-//        pageView.agencyListView = new AgencyListView();
-//        pageView.predictionsListView = new PredictionsListView();
-//
+        PageController.initialize();
     });
 });
